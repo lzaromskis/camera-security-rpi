@@ -15,7 +15,7 @@ class PacketDataSerializer(IPacketDataSerializer):
     def __init__(self):
         pass
 
-    def Serialize(self, data):
+    def Serialize(self, data: PacketData) -> str:
         if type(data) != PacketData:
             raise TypeError("Data must be a PacketData")
         string_io = StringIO()
@@ -28,7 +28,7 @@ class PacketDataSerializer(IPacketDataSerializer):
         string_io.close()
         return string_data
 
-    def Deserialize(self, data):
+    def Deserialize(self, data: str) -> PacketData:
         if type(data) != str:
             raise TypeError("Data must be a string!")
         packet_data = PacketData()

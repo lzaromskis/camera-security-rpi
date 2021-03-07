@@ -16,16 +16,16 @@ class ChangePasswordRequest(IRequest):
                 default_responses: IDefaultResponses) -> PacketData:
         secret = data.GetAttribute(PacketAttribute.SECRET)
         if secret is None:
-            return default_responses.GetInvalidPacketResponse(PacketAttribute.SECRET)
+            return default_responses.GetInvalidAttributeInPacketResponse(PacketAttribute.SECRET)
         is_authenticated = authentication_facade.IsAuthenticated(secret)
         if not is_authenticated:
             return default_responses.GetAuthenticationFailureResponse()
         password = data.GetAttribute(PacketAttribute.PASSWORD)
         if password is None:
-            return default_responses.GetInvalidPacketResponse(PacketAttribute.PASSWORD)
+            return default_responses.GetInvalidAttributeInPacketResponse(PacketAttribute.PASSWORD)
         new_password = data.GetAttribute(PacketAttribute.PASSWORD_NEW)
         if new_password is None:
-            return default_responses.GetInvalidPacketResponse(PacketAttribute.PASSWORD_NEW)
+            return default_responses.GetInvalidAttributeInPacketResponse(PacketAttribute.PASSWORD_NEW)
         is_password_valid = authentication_facade.IsPasswordValid(password)
         if not is_password_valid:
             ret_val = PacketData()

@@ -17,6 +17,6 @@ class IServer(ABC):
     @abstractmethod
     def IsRunning(self) -> bool:
         """
-        Returns True if the server is running
+        Checks if the server is running
         """
         raise NotImplementedError()

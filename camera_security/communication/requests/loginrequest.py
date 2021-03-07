@@ -17,7 +17,7 @@ class LoginRequest(IRequest):
                 default_responses: IDefaultResponses) -> PacketData:
         password = data.GetAttribute(PacketAttribute.PASSWORD)
         if password is None:
-            return default_responses.GetInvalidPacketResponse(PacketAttribute.PASSWORD)
+            return default_responses.GetInvalidAttributeInPacketResponse(PacketAttribute.PASSWORD)
         secret = authentication_facade.Authenticate(password)
         if secret is None:
             ret_val = PacketData()

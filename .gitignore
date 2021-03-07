@@ -10,6 +10,7 @@ __pycache__/
 *.pem
 
 # Distribution / packaging
+.idea/
 .Python
 build/
 develop-eggs/

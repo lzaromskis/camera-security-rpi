@@ -2,29 +2,28 @@
 # Implements the SessionManager class for managing a session with the user
 # Author: Lukas Žaromskis
 
-from camera_security.authentication.ipasswordmanagerfactory import PasswordManagerFactory
-from camera_security.authentication.isessiontoken import SessionToken
-from camera_security.authentication.isecretgenerator import SecretGenerator
-from camera_security.authentication.isessiontoken import ISessionToken
+from typing import Optional
+from camera_security.authentication.passwordmanagerbuilder import PasswordManagerBuilder
+from camera_security.authentication.sessiontoken import SessionToken
+from camera_security.authentication.secretgenerator import SecretGenerator
 
 
 class AuthenticationFacade:
 
     def __init__(self):
-        factory = PasswordManagerFactory()
-        self.__passwordManager = factory.GetManager()
+        factory = PasswordManagerBuilder()
+        self.__passwordManager = factory.Build()
         self.__token = None
 
     def IsAuthenticated(self, secret: str):
         """
-        Checks if the user is already authenticated
+        Checks if the user is already authenticated.
         """
         return self.__token is not None and self.__token.IsValid(secret)
 
-    def Authenticate(self, password: str) -> str:
+    def Authenticate(self, password: str) -> Optional[str]:
         """
-        Tries to authenticate the user.\n
-        :return: ISessionToken if authentication successful or None if authentication failed
+        Tries to authenticate the user. Returns None if failed to authenticate.
         """
         if self.__passwordManager.IsValid(password):
             self.__token = SessionToken(SecretGenerator())
@@ -34,12 +33,12 @@ class AuthenticationFacade:
 
     def ChangePassword(self, new_password: str):
         """
-        Changes the password
+        Changes the password.
         """
         self.__passwordManager.ChangePassword(new_password)
 
     def IsPasswordValid(self, password: str) -> bool:
         """
-        Checks if the given password is valid
+        Checks if the given password is valid.
         """
         return self.__passwordManager.IsValid(password)

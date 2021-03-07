@@ -13,7 +13,7 @@ class ConsoleLogger(ILogger):
     def __init__(self):
         self.__lock = Lock()
 
-    def Log(self, message):
+    def Log(self, message: str):
         self.__lock.acquire()
         print(str(datetime.utcnow()) + ": " + message)
         self.__lock.release()

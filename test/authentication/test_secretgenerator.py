@@ -1,6 +1,6 @@
 import unittest
 import string
-from camera_security.authentication.isecretgenerator import SecretGenerator
+from camera_security.authentication.secretgenerator import SecretGenerator
 
 
 SYMBOLS = string.ascii_letters + string.digits

@@ -73,3 +73,7 @@ class PacketDataTests(unittest.TestCase):
 
         # Assert
         self.assertEqual(False, result)
+
+
+if __name__ == '__main__':
+    unittest.main()

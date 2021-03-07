@@ -1,5 +1,5 @@
 import unittest
-from camera_security.communication.packetdata import  PacketData
+from camera_security.communication.packetdata import PacketData
 from camera_security.communication.packetdataserializer import PacketDataSerializer
 
 
@@ -38,3 +38,6 @@ class PacketDataSerializerTests(unittest.TestCase):
         for k, v in result.attributes.items():
             self.assertEqual(expected[k], v)
 
+
+if __name__ == '__main__':
+    unittest.main()

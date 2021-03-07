@@ -1,6 +1,5 @@
 import unittest
-from camera_security.authentication.ipassword_io import PasswordIO
-from camera_security.authentication.ipassword_io import MAGIC
+from camera_security.authentication.passwordio import PasswordIO, MAGIC
 from camera_security.authentication.passworddata import PasswordData
 from camera_security.exceptions import InvalidFileError
 from camera_security.exceptions import FileNotFoundError
@@ -46,8 +45,8 @@ class PasswordIOTests(unittest.TestCase):
         actual_result = io.GetPassword()
 
         # Assert
-        self.assertEqual(expected_result.hash, actual_result.hash)
-        self.assertEqual(expected_result.salt, actual_result.salt)
+        self.assertEqual(expected_result.GetSalt(), actual_result.GetSalt())
+        self.assertEqual(expected_result.GetHash(), actual_result.GetHash())
 
     def test_SavePassword(self):
         # Arrange

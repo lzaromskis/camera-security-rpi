@@ -1,5 +1,5 @@
 import unittest
-from camera_security.authentication.ihash import HashSHA256
+from camera_security.authentication.hashsha256 import HashSHA256
 
 
 class HashSHA256Tests(unittest.TestCase):

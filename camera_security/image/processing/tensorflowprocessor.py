@@ -5,10 +5,10 @@
 from typing import List, Any
 import tflite_runtime.interpreter as tflite
 import numpy as np
-from camera_security.Image.frame import Frame
-from camera_security.Image.helpers.boundingbox import BoundingBox
-from camera_security.Image.processing.detectiondata import DetectionData
-from camera_security.Image.processing.iframeprocessor import IFrameProcessor
+from camera_security.image.frame import Frame
+from camera_security.image.helpers.boundingbox import BoundingBox
+from camera_security.image.processing.detectiondata import DetectionData
+from camera_security.image.processing.iframeprocessor import IFrameProcessor
 
 
 class TensorflowProcessor(IFrameProcessor):

@@ -6,6 +6,7 @@ from camera_security.communication.irequestexecutor import IRequestExecutor
 from camera_security.communication.packetattribute import PacketAttribute
 from camera_security.communication.requests.irequest import IRequest
 from camera_security.communication.requests.requestcode import RequestCode
+from camera_security.communication.requests.requesttemplate import RequestTemplate
 from camera_security.communication.responses.idefaultresponses import IDefaultResponses
 from camera_security.communication.ipacketdataserializer import IPacketDataSerializer
 from camera_security.exceptions import RequestNotFoundError
@@ -34,6 +35,6 @@ class RequestExecutor(IRequestExecutor):
             raise RequestNotFoundError("Request not found with code: " + str(code),
                                        self.__packet_data_serializer.Serialize(response))
 
-    def RegisterRequest(self, request_code: RequestCode, request: IRequest):
+    def RegisterRequest(self, request_code: RequestCode, request: RequestTemplate):
         self.__requests[request_code.value] = request
 

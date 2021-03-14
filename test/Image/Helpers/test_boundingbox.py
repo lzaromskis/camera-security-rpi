@@ -1,5 +1,5 @@
 import unittest
-from camera_security.Image.helpers.boundingbox import BoundingBox
+from camera_security.image.helpers.boundingbox import BoundingBox
 
 
 class BoundingBoxTests(unittest.TestCase):

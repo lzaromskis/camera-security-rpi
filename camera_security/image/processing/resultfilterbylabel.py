@@ -3,8 +3,8 @@
 # Author: Lukas Žaromskis
 
 from typing import List
-from camera_security.Image.processing.detectiondata import DetectionData
-from camera_security.Image.processing.iresultfilter import IResultFilter
+from camera_security.image.processing.detectiondata import DetectionData
+from camera_security.image.processing.iresultfilter import IResultFilter
 
 
 class ResultFilterByLabel(IResultFilter):

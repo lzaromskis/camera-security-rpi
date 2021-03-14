@@ -3,6 +3,7 @@
 # Author: Lukas Žaromskis
 
 from typing import Optional
+from camera_security.communication.packetattribute import PacketAttribute
 
 
 class PacketData:
@@ -29,4 +30,4 @@ class PacketData:
         """
         Checks if the PacketData object is valid.
         """
-        return "code" in self.attributes.keys() and self.attributes["code"].isdigit()
+        return PacketAttribute.CODE in self.attributes.keys() and self.attributes[PacketAttribute.CODE].isdigit()

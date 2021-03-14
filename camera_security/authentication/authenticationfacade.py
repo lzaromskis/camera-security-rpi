@@ -15,7 +15,7 @@ class AuthenticationFacade:
         self.__passwordManager = factory.Build()
         self.__token = None
 
-    def IsAuthenticated(self, secret: str):
+    def IsAuthenticated(self, secret: str) -> bool:
         """
         Checks if the user is already authenticated.
         """

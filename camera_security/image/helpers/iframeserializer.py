@@ -4,7 +4,7 @@
 
 from abc import ABC, abstractmethod
 
-from camera_security.Image.frame import Frame
+from camera_security.image.frame import Frame
 
 
 class IFrameSerializer(ABC):

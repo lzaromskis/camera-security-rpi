@@ -4,8 +4,8 @@
 
 from abc import ABC, abstractmethod
 from typing import List
-from camera_security.Image.frame import Frame
-from camera_security.Image.processing.detectiondata import DetectionData
+from camera_security.image.frame import Frame
+from camera_security.image.processing.detectiondata import DetectionData
 
 
 class IFrameProcessor(ABC):

@@ -44,12 +44,15 @@ class Server(IServer):
                 data = connection.recv(1024)
                 if data:
                     str_data = data.decode()
+                    self.__logger.Log("Received message: " + str_data)
                     try:
                         response = self.__request_executor.ExecuteRequest(str_data)
                     except RequestNotFoundError as e:
                         self.__logger.Log(e.message)
                         response = e.response
                     self.__logger.Log("Sending data to " + str(client_address))
+                    size = len(response)
+                    self.__logger.Log("Response size: " + str(size) + " B (" + str(size / 1024) + " KB)")
                     connection.sendall(str.encode(response))
             finally:
                 connection.close()
@@ -98,16 +101,20 @@ from camera_security.authentication.authenticationfacade import AuthenticationFa
 from camera_security.communication.requests.requestcode import RequestCode
 from camera_security.communication.requests.loginrequest import LoginRequest
 from camera_security.communication.requests.changepasswordrequest import ChangePasswordRequest
+from camera_security.communication.requests.getimagerequest import GetImageRequest
+from camera_security.authentication.mockauthenticationfacade import MockAuthenticationFacade
 from camera_security.communication.servertls import ServerTLS
-executor = RequestExecutor(PacketDataSerializer(), AuthenticationFacade(), DefaultResponses())
+from camera_security.image.imagefacade import ImageFacade
+from camera_security.image.helpers.bmpbase64frameserializer import BmpBase64FrameSerializer
+from camera_security.image.helpers.jpgbase64frameserializer import JpgBase64FrameSerializer
+executor = RequestExecutor(PacketDataSerializer(), MockAuthenticationFacade(), DefaultResponses())
 executor.RegisterRequest(RequestCode.LOGIN, LoginRequest())
 executor.RegisterRequest(RequestCode.CHANGE_PASSWORD, ChangePasswordRequest())
+executor.RegisterRequest(RequestCode.GET_IMAGE, GetImageRequest(ImageFacade(), JpgBase64FrameSerializer()))
 s = Server("127.0.0.1", 7500, executor, ConsoleLogger())
-#s = ServerTLS("127.0.0.1", 7500, "cert.pem", "key.pem", executor, ConsoleLogger())
+# s = ServerTLS("127.0.0.1", 7500, "cert.pem", "key.pem", executor, ConsoleLogger())
 s.StartListening()
 print("Exited StartListening()")
-print("Sleeping for 10 seconds...")
+print("Sleeping for 1000 seconds...")
 time.sleep(1000)
 print("Woke up. Shutting down the server...")
-s.KillServer()
-print("Server shut down.")

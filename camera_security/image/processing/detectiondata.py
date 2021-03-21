@@ -1,7 +1,7 @@
 # detectiondata.py | camera-security-rpi
 # Describes the DetectionData class for storing detection data
 # Author: Lukas Žaromskis
-from camera_security.image.helpers.boundingbox import BoundingBox
+from camera_security.utility.boundingbox import BoundingBox
 
 
 class DetectionData:

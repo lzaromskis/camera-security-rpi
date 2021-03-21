@@ -1,6 +1,6 @@
 import unittest
 from camera_security.communication.packetdata import PacketData
-from camera_security.communication.packetdataserializer import PacketDataSerializer
+from camera_security.communication.serializers.packetdataserializer import PacketDataSerializer
 
 
 class PacketDataSerializerTests(unittest.TestCase):
@@ -17,7 +17,7 @@ class PacketDataSerializerTests(unittest.TestCase):
         # Arrange
         data = PacketData()
         data.attributes = self.attributes
-        expected = "key1=value1;key2=value2;key3=value3;"
+        expected = "key1&value1;key2&value2;key3&value3;"
 
         # Act
         result = self.serializer.Serialize(data)
@@ -27,7 +27,7 @@ class PacketDataSerializerTests(unittest.TestCase):
 
     def test_Deserialize(self):
         # Arrange
-        data = "key1=value1;key2=value2;key3=value3;"
+        data = "key1&value1;key2&value2;key3&value3;"
         expected = self.attributes
 
         # Act

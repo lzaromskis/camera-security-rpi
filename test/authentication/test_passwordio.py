@@ -1,8 +1,8 @@
 import unittest
 from camera_security.authentication.passwordio import PasswordIO, MAGIC
 from camera_security.authentication.passworddata import PasswordData
-from camera_security.exceptions import InvalidFileError
-from camera_security.exceptions import FileNotFoundError
+from camera_security.utility.exceptions.invalidfileerror import InvalidFileError
+from camera_security.utility.exceptions.filenotfounderror import FileNotFoundError
 
 
 class PasswordIOTests(unittest.TestCase):

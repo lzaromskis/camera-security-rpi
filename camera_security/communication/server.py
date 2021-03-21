@@ -4,7 +4,7 @@
 
 from camera_security.communication.iserver import IServer
 from camera_security.communication.irequestexecutor import IRequestExecutor
-from camera_security.exceptions import RequestNotFoundError
+from camera_security.utility.exceptions.requestnotfounderror import RequestNotFoundError
 from camera_security.utility.ilogger import ILogger
 import socket
 import threading
@@ -53,7 +53,7 @@ class Server(IServer):
                     self.__logger.Log("Sending data to " + str(client_address))
                     size = len(response)
                     self.__logger.Log("Response size: " + str(size) + " B (" + str(size / 1024) + " KB)")
-                    connection.sendall(str.encode(response))
+                    connection.sendall(str.encode(''.join(["{:08d}".format(size), response])))
             finally:
                 connection.close()
 
@@ -95,18 +95,16 @@ class Server(IServer):
 import time
 from camera_security.utility.consolelogger import ConsoleLogger
 from camera_security.communication.requestexecutor import RequestExecutor
-from camera_security.communication.packetdataserializer import PacketDataSerializer
+from camera_security.communication.serializers.packetdataserializer import PacketDataSerializer
 from camera_security.communication.responses.defaultresponses import DefaultResponses
-from camera_security.authentication.authenticationfacade import AuthenticationFacade
 from camera_security.communication.requests.requestcode import RequestCode
 from camera_security.communication.requests.loginrequest import LoginRequest
 from camera_security.communication.requests.changepasswordrequest import ChangePasswordRequest
 from camera_security.communication.requests.getimagerequest import GetImageRequest
 from camera_security.authentication.mockauthenticationfacade import MockAuthenticationFacade
-from camera_security.communication.servertls import ServerTLS
 from camera_security.image.imagefacade import ImageFacade
-from camera_security.image.helpers.bmpbase64frameserializer import BmpBase64FrameSerializer
-from camera_security.image.helpers.jpgbase64frameserializer import JpgBase64FrameSerializer
+from camera_security.image.serializers.jpgbase64frameserializer import JpgBase64FrameSerializer
+
 executor = RequestExecutor(PacketDataSerializer(), MockAuthenticationFacade(), DefaultResponses())
 executor.RegisterRequest(RequestCode.LOGIN, LoginRequest())
 executor.RegisterRequest(RequestCode.CHANGE_PASSWORD, ChangePasswordRequest())

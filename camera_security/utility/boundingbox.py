@@ -2,6 +2,8 @@
 # Describes the BoundingBox class for storing bounding box data
 # Author: Lukas Žaromskis
 
+from typing import Tuple
+
 
 class BoundingBox:
 
@@ -15,3 +17,12 @@ class BoundingBox:
         """
         return (self.__top_left[0] < other.__bottom_right[0] and self.__bottom_right[0] > other.__top_left[0] and
                 self.__top_left[1] < other.__bottom_right[1] and self.__bottom_right[1] > other.__top_left[1])
+
+    def GetCoordinates(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+        """
+        Returns the coordinates in a tuple.
+        First element is top left corner.
+        Second element is bottom right corner.
+        Each corner contains the x and y coordinates
+        """
+        return self.__top_left, self.__bottom_right

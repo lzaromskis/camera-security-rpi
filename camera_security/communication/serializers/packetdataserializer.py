@@ -2,14 +2,14 @@
 # Implements the IPacketDataSerializer interface
 # Author: Lukas Žaromskis
 
-from camera_security.communication.ipacketdataserializer import IPacketDataSerializer
+from camera_security.communication.serializers.ipacketdataserializer import IPacketDataSerializer
 from camera_security.communication.packetdata import PacketData
 from io import StringIO
 
 
 class PacketDataSerializer(IPacketDataSerializer):
 
-    KEY_VALUE_SEPARATOR = '='
+    KEY_VALUE_SEPARATOR = '&'
     PAIR_SEPARATOR = ';'
 
     def __init__(self):
@@ -30,7 +30,7 @@ class PacketDataSerializer(IPacketDataSerializer):
 
     def Deserialize(self, data: str) -> PacketData:
         if type(data) != str:
-            raise TypeError("Data must be a string!")
+            raise TypeError("Data must be a string")
         packet_data = PacketData()
         split_data = data.split(self.PAIR_SEPARATOR)
         for d in split_data:

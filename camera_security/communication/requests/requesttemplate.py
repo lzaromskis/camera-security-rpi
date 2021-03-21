@@ -4,7 +4,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Optional, Tuple
-from camera_security.communication.packetdataserializer import PacketData
+from camera_security.communication.serializers.packetdataserializer import PacketData
 from camera_security.authentication.authenticationfacade import AuthenticationFacade
 from camera_security.communication.responses.idefaultresponses import IDefaultResponses
 

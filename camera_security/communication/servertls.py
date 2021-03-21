@@ -4,7 +4,7 @@
 
 from camera_security.communication.iserver import IServer
 from camera_security.communication.irequestexecutor import IRequestExecutor
-from camera_security.exceptions import RequestNotFoundError
+from camera_security.utility.exceptions.requestnotfounderror import RequestNotFoundError
 from camera_security.utility.ilogger import ILogger
 import socket
 import threading

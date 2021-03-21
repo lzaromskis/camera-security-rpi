@@ -10,7 +10,7 @@ from camera_security.image.frame import Frame
 class IFrameSerializer(ABC):
 
     @abstractmethod
-    def Serialize(self, frame: Frame) -> str:
+    def Serialize(self, data: Frame) -> str:
         """
         Serializes the given frame to a string
         """

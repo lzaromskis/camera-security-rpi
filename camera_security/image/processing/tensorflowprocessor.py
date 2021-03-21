@@ -6,7 +6,7 @@ from typing import List, Any
 import tflite_runtime.interpreter as tflite
 import numpy as np
 from camera_security.image.frame import Frame
-from camera_security.image.helpers.boundingbox import BoundingBox
+from camera_security.utility.boundingbox import BoundingBox
 from camera_security.image.processing.detectiondata import DetectionData
 from camera_security.image.processing.iframeprocessor import IFrameProcessor
 

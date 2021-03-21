@@ -5,7 +5,8 @@
 from os import path
 from camera_security.authentication.ipasswordio import IPasswordIO
 from camera_security.authentication.passworddata import PasswordData
-from camera_security.exceptions import InvalidFileError
+from camera_security.utility.exceptions.invalidfileerror import InvalidFileError
+from camera_security.utility.exceptions.filenotfounderror import FileNotFoundError
 
 MAGIC = "CSpw"
 

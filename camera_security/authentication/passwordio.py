@@ -8,10 +8,10 @@ from camera_security.authentication.passworddata import PasswordData
 from camera_security.utility.exceptions.invalidfileerror import InvalidFileError
 from camera_security.utility.exceptions.filenotfounderror import FileNotFoundError
 
-MAGIC = "CSpw"
-
 
 class PasswordIO(IPasswordIO):
+
+    MAGIC = "CSpw"
 
     def __init__(self, location: str):
         self.__location = location
@@ -21,7 +21,7 @@ class PasswordIO(IPasswordIO):
             raise FileNotFoundError("File \"" + self.__location + "\" does not exist!")
         f = open(self.__location, "r")
         raw_data = f.readline()
-        if not raw_data.startswith(MAGIC):
+        if not raw_data.startswith(self.MAGIC):
             f.close()
             raise InvalidFileError("File \"" + self.__location + "\" is not a valid password file!")
         split_data = raw_data.split("|")
@@ -35,5 +35,5 @@ class PasswordIO(IPasswordIO):
 
     def SavePassword(self, new_data: PasswordData):
         f = open(self.__location, "w")
-        f.write(MAGIC + "|" + new_data.GetHash() + "|" + new_data.GetSalt())
+        f.write(''.join([self.MAGIC, "|", new_data.GetHash(), "|", new_data.GetSalt()]))
         f.close()

@@ -7,7 +7,7 @@ from typing import Tuple
 
 class BoundingBox:
 
-    def __init__(self, top_left_x: int, top_left_y: int, bottom_right_x: int, bottom_right_y: int):
+    def __init__(self, top_left_x: float, top_left_y: float, bottom_right_x: float, bottom_right_y: float):
         self.__top_left = (top_left_x, top_left_y)
         self.__bottom_right = (bottom_right_x, bottom_right_y)
 
@@ -18,7 +18,7 @@ class BoundingBox:
         return (self.__top_left[0] < other.__bottom_right[0] and self.__bottom_right[0] > other.__top_left[0] and
                 self.__top_left[1] < other.__bottom_right[1] and self.__bottom_right[1] > other.__top_left[1])
 
-    def GetCoordinates(self) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+    def GetCoordinates(self) -> Tuple[Tuple[float, float], Tuple[float, float]]:
         """
         Returns the coordinates in a tuple.
         First element is top left corner.

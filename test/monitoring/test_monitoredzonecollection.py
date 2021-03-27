@@ -100,7 +100,7 @@ class MonitoredZoneCollectionTests(unittest.TestCase):
         collection._MonitoredZoneCollection__zones[name] = zone
 
         # Act
-        result = collection.DeleteZone(name)
+        result = collection.RemoveZone(name)
 
         # Assert
         self.assertTrue(result)
@@ -113,7 +113,7 @@ class MonitoredZoneCollectionTests(unittest.TestCase):
         name = "test_zone"
 
         # Act
-        result = collection.DeleteZone(name)
+        result = collection.RemoveZone(name)
 
         # Assert
         self.assertFalse(result)

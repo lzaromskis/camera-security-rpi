@@ -2,7 +2,7 @@
 # Implements the IRequest interface for getting a frame
 # Author: Lukas Žaromskis
 
-from camera_security.image.helpers.iframeserializer import IFrameSerializer
+from camera_security.image.serializers.iframeserializer import IFrameSerializer
 from camera_security.image.imagefacade import ImageFacade
 from camera_security.authentication.authenticationfacade import AuthenticationFacade
 from camera_security.communication.packetattribute import PacketAttribute

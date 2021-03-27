@@ -1,5 +1,5 @@
 import unittest
-from camera_security.authentication.passwordio import PasswordIO, MAGIC
+from camera_security.authentication.passwordio import PasswordIO
 from camera_security.authentication.passworddata import PasswordData
 from camera_security.utility.exceptions.invalidfileerror import InvalidFileError
 from camera_security.utility.exceptions.filenotfounderror import FileNotFoundError
@@ -50,7 +50,7 @@ class PasswordIOTests(unittest.TestCase):
 
     def test_SavePassword(self):
         # Arrange
-        expected_result = MAGIC + "|hash|salt"
+        expected_result = PasswordIO.MAGIC + "|hash|salt"
         file_name = "password_valid"
         hash_data = "hash"
         salt_data = "salt"

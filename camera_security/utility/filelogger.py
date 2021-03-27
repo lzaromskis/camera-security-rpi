@@ -10,7 +10,7 @@ from camera_security.utility.loglevel import LogLevel
 
 class FileLogger(ILogger):
     __level_text = {LogLevel.NONE: "",
-                    LogLevel.INFORMATION: "(INFO) ",
+                    LogLevel.INFO: "(INFO) ",
                     LogLevel.ERROR: "(ERROR) ",
                     LogLevel.WARNING: "(WARNING) "}
 

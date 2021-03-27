@@ -13,14 +13,14 @@ from camera_security.utility.loglevel import LogLevel
 class ConsoleLogger(ILogger):
 
     __level_text = {LogLevel.NONE: "",
-                    LogLevel.INFORMATION: "(INFO) ",
+                    LogLevel.INFO: "(INFO) ",
                     LogLevel.ERROR: "(ERROR) ",
                     LogLevel.WARNING: "(WARNING) "}
 
     def __init__(self):
         self.__lock = Lock()
 
-    def Log(self, message: str, level: LogLevel = LogLevel.NONE):
+    def Log(self, message: str, level: LogLevel = LogLevel.INFO):
         self.__lock.acquire()
         print(''.join([str(datetime.utcnow()), ": ", ConsoleLogger.__level_text[level], message]))
         self.__lock.release()

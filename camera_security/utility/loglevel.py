@@ -7,6 +7,6 @@ from enum import Enum
 
 class LogLevel(Enum):
     NONE = 0
-    INFORMATION = 1
+    INFO = 1
     WARNING = 2
     ERROR = 3

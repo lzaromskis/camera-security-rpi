@@ -37,7 +37,7 @@ class MonitoredZoneCollection:
         """
         return list(self.__zones.values())
 
-    def DeleteZone(self, name: str) -> bool:
+    def RemoveZone(self, name: str) -> bool:
         """
         Deletes a monitored zone with the given name from the collection. Returns true if the deletion was successful
         """

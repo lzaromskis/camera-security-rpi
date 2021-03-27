@@ -92,27 +92,27 @@ class Server(IServer):
 #         await writer.drain()
 #         writer.close()
 
-import time
-from camera_security.utility.consolelogger import ConsoleLogger
-from camera_security.communication.requestexecutor import RequestExecutor
-from camera_security.communication.serializers.packetdataserializer import PacketDataSerializer
-from camera_security.communication.responses.defaultresponses import DefaultResponses
-from camera_security.communication.requests.requestcode import RequestCode
-from camera_security.communication.requests.loginrequest import LoginRequest
-from camera_security.communication.requests.changepasswordrequest import ChangePasswordRequest
-from camera_security.communication.requests.getimagerequest import GetImageRequest
-from camera_security.authentication.mockauthenticationfacade import MockAuthenticationFacade
-from camera_security.image.imagefacade import ImageFacade
-from camera_security.image.serializers.jpgbase64frameserializer import JpgBase64FrameSerializer
-
-executor = RequestExecutor(PacketDataSerializer(), MockAuthenticationFacade(), DefaultResponses())
-executor.RegisterRequest(RequestCode.LOGIN, LoginRequest())
-executor.RegisterRequest(RequestCode.CHANGE_PASSWORD, ChangePasswordRequest())
-executor.RegisterRequest(RequestCode.GET_IMAGE, GetImageRequest(ImageFacade(), JpgBase64FrameSerializer()))
-s = Server("127.0.0.1", 7500, executor, ConsoleLogger())
-# s = ServerTLS("127.0.0.1", 7500, "cert.pem", "key.pem", executor, ConsoleLogger())
-s.StartListening()
-print("Exited StartListening()")
-print("Sleeping for 1000 seconds...")
-time.sleep(1000)
-print("Woke up. Shutting down the server...")
+# import time
+# from camera_security.utility.consolelogger import ConsoleLogger
+# from camera_security.communication.requestexecutor import RequestExecutor
+# from camera_security.communication.serializers.packetdataserializer import PacketDataSerializer
+# from camera_security.communication.responses.defaultresponses import DefaultResponses
+# from camera_security.communication.requests.requestcode import RequestCode
+# from camera_security.communication.requests.loginrequest import LoginRequest
+# from camera_security.communication.requests.changepasswordrequest import ChangePasswordRequest
+# from camera_security.communication.requests.getimagerequest import GetImageRequest
+# from camera_security.authentication.mockauthenticationfacade import MockAuthenticationFacade
+# from camera_security.image.imagefacade import ImageFacade
+# from camera_security.image.serializers.jpgbase64frameserializer import JpgBase64FrameSerializer
+#
+# executor = RequestExecutor(PacketDataSerializer(), MockAuthenticationFacade(), DefaultResponses())
+# executor.RegisterRequest(RequestCode.LOGIN, LoginRequest())
+# executor.RegisterRequest(RequestCode.CHANGE_PASSWORD, ChangePasswordRequest())
+# executor.RegisterRequest(RequestCode.GET_IMAGE, GetImageRequest(ImageFacade(), JpgBase64FrameSerializer()))
+# s = Server("127.0.0.1", 7500, executor, ConsoleLogger())
+# # s = ServerTLS("127.0.0.1", 7500, "cert.pem", "key.pem", executor, ConsoleLogger())
+# s.StartListening()
+# print("Exited StartListening()")
+# print("Sleeping for 1000 seconds...")
+# time.sleep(1000)
+# print("Woke up. Shutting down the server...")

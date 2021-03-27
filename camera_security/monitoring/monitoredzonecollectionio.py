@@ -29,7 +29,7 @@ class MonitoredZoneCollectionIO(IMonitoredZoneCollectionIO):
         if len(split_data) != 2:
             f.close()
             raise InvalidFileError(
-                "File \"" + filename + "\" must contain only 3 data attributes: magic number, hash and salt!")
+                "File \"" + filename + "\" must contain only 2 data attributes: magic number and monitored zone collection data!")
         ret_val = self.__collection_serializer.Deserialize(split_data[1])
         f.close()
         return ret_val

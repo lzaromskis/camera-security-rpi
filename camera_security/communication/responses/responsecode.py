@@ -11,3 +11,4 @@ class ResponseCode(Enum):
     INVALID_PACKET = 30
     BAD_PASSWORD = 40
     INVALID_REQUEST = 50
+    BAD_DATA = 60

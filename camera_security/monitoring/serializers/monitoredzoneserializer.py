@@ -34,7 +34,7 @@ class MonitoredZoneSerializer(IMonitoredZoneSerializer):
             split_data = data.split(self.DATA_SEPARATOR)
             zone = MonitoredZone(split_data[0],
                                  self.__bounds_serializer.Deserialize(split_data[1]))
-            zone.SetActive(split_data[2] == "true")
+            zone.SetActive(split_data[2] == "True")
             return zone
         except Exception:
             raise DeserializationFailedError("Failed to deserialize string to a MonitoredZone")

@@ -33,10 +33,10 @@ class BoundingBoxSerializer(IBoundingBoxSerializer):
             raise TypeError("Data must be a string")
         try:
             split_data = data.split(self.COORDINATE_SEPARATOR)
-            bounds = BoundingBox(int(split_data[0]),
-                                 int(split_data[1]),
-                                 int(split_data[2]),
-                                 int(split_data[3]))
+            bounds = BoundingBox(float(split_data[0]),
+                                 float(split_data[1]),
+                                 float(split_data[2]),
+                                 float(split_data[3]))
             return bounds
         except Exception:
             raise DeserializationFailedError("Failed to deserialize the given string to a bounding box")

@@ -12,7 +12,7 @@ class AuthenticationFacade:
 
     def __init__(self):
         factory = PasswordManagerBuilder()
-        self.__passwordManager = factory.Build()
+        self.__passwordManager = factory.AddPasswordIO("passwordio", "password.cspw").Build()
         self.__token = None
 
     def IsAuthenticated(self, secret: str) -> bool:

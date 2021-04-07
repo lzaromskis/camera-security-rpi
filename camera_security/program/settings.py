@@ -15,7 +15,9 @@ class Settings:
     USE_TLS_KEY = "use_tls"
     TENSOR_MODEL_FILE_KEY = "tensor_model_file"
     TENSOR_LABELS_FILE_KEY = "tensor_labels_file"
+    ACCEPTED_LABELS_KEY = "accepted_labels"
     CERTAINTY_THRESHOLD_KEY = "certainty_threshold"
+    BOUNDS_RESIZE_PERCENTAGE_KEY = "bounds_resize_percentage"
     CAMERA_ID_KEY = "camera_id"
     MONITORED_ZONES_FILENAME_KEY = "monitored_zones_file"
 
@@ -29,7 +31,9 @@ class Settings:
         self.settings_dict[self.USE_TLS_KEY] = "false"
         self.settings_dict[self.TENSOR_MODEL_FILE_KEY] = "detect.tflite"
         self.settings_dict[self.TENSOR_LABELS_FILE_KEY] = "coco_labels.txt"
+        self.settings_dict[self.ACCEPTED_LABELS_KEY] = "person"
         self.settings_dict[self.CERTAINTY_THRESHOLD_KEY] = "0.6"
+        self.settings_dict[self.BOUNDS_RESIZE_PERCENTAGE_KEY] = "0.1"
         self.settings_dict[self.CAMERA_ID_KEY] = "0"
         self.settings_dict[self.MONITORED_ZONES_FILENAME_KEY] = "zones.csmz"
 

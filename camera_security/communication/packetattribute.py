@@ -12,6 +12,7 @@ class PacketAttribute:
     SECRET = "secret"
     IMAGE = "image"
     MESSAGE = "message"
-
-#    def __str__(self):
-#        return self.value
+    ZONES = "monitored_zones"
+    ZONE = "zone"
+    ZONE_NAME = "zone_name"
+    ZONE_ACTIVE = "zone_active"

@@ -9,13 +9,16 @@ from camera_security.image.opencvcameraaccessor import OpenCVCameraAccessor
 from camera_security.image.processing.detectiondata import DetectionData
 from camera_security.image.processing.iframeprocessor import IFrameProcessor
 from camera_security.image.processing.iresultfilter import IResultFilter
+from camera_security.image.processing.tensorflowprocessor import TensorflowProcessor
+from camera_security.utility.ilogger import ILogger
 
 
 class ImageFacade:
 
-    def __init__(self):
-        self.__camera_accessor: ICameraAccessor = OpenCVCameraAccessor(0, 640, 480)
-        self.__frame_processor: IFrameProcessor = None
+    def __init__(self, camera_id: int, model_filename: str, labels_filename: str, logger: ILogger):
+        self.__logger = logger
+        self.__camera_accessor: ICameraAccessor = OpenCVCameraAccessor(camera_id, 640, 480)
+        self.__frame_processor: IFrameProcessor = TensorflowProcessor(model_filename, labels_filename, self.__logger)
         self.__result_filters: List[IResultFilter] = list()
 
     def RegisterFilter(self, filter: IResultFilter):

@@ -3,11 +3,12 @@
 # Author: Lukas Žaromskis
 
 from os import path
+from typing import Optional
+
 from camera_security.utility.exceptions.filenotfounderror import FileNotFoundError
 
 
 class Settings:
-
     PASSWORD_FILE_KEY = "password_file"
     HASH_METHOD_KEY = "hash_method"
     SECRET_GENERATION_METHOD_KEY = "secret_generation_method"
@@ -20,8 +21,11 @@ class Settings:
     BOUNDS_RESIZE_PERCENTAGE_KEY = "bounds_resize_percentage"
     CAMERA_ID_KEY = "camera_id"
     MONITORED_ZONES_FILENAME_KEY = "monitored_zones_file"
+    ALERTS_FOLDER_KEY = "alerts_folder"
+    ALERTS_TO_KEEP_KEY = "alerts_to_keep"
+    ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY = "alert_triggered_timeout_seconds"
 
-    def __init__(self, settings_file=None):
+    def __init__(self, settings_file: Optional[str] = None):
         # Initialize dictionary with default values
         self.settings_dict = dict()
         self.settings_dict[self.PASSWORD_FILE_KEY] = "password.cspw"
@@ -36,6 +40,9 @@ class Settings:
         self.settings_dict[self.BOUNDS_RESIZE_PERCENTAGE_KEY] = "0.1"
         self.settings_dict[self.CAMERA_ID_KEY] = "0"
         self.settings_dict[self.MONITORED_ZONES_FILENAME_KEY] = "zones.csmz"
+        self.settings_dict[self.ALERTS_FOLDER_KEY] = "./alerts/"
+        self.settings_dict[self.ALERTS_TO_KEEP_KEY] = "10"
+        self.settings_dict[self.ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY] = "30"
 
         # If a file was given, read data from it
         if settings_file:

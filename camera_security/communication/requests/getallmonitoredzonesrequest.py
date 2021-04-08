@@ -1,5 +1,5 @@
 # getallmonitoredzonesrequest.py | camera-security-rpi
-# Implements the IRequest interface for getting a frame
+# Implements the IRequest interface for getting all monitored zones
 # Author: Lukas Žaromskis
 
 from camera_security.authentication.authenticationfacade import AuthenticationFacade

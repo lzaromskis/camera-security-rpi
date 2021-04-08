@@ -16,3 +16,5 @@ class PacketAttribute:
     ZONE = "zone"
     ZONE_NAME = "zone_name"
     ZONE_ACTIVE = "zone_active"
+    ALERT_LIST = "alert_list"
+    ALERT = "alert"

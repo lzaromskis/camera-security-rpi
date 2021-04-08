@@ -1,5 +1,5 @@
 # removemonitoredzonerequest.py | camera-security-rpi
-# Implements the IRequest interface for getting a frame
+# Implements the IRequest interface for removing a monitored zone
 # Author: Lukas Žaromskis
 
 from camera_security.authentication.authenticationfacade import AuthenticationFacade

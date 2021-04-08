@@ -10,5 +10,5 @@ class Frame:
     def __init__(self, data: np.ndarray):
         self.__frame_data = data
 
-    def GetData(self):
+    def GetData(self) -> np.ndarray:
         return self.__frame_data

@@ -5,11 +5,11 @@
 from camera_security.communication.serializers.ipacketdataserializer import IPacketDataSerializer
 from camera_security.communication.packetdata import PacketData
 from io import StringIO
+from camera_security.utility.exceptions.invalidpacketattributevalueerror import InvalidPacketAttributeValueError
 
 
 class PacketDataSerializer(IPacketDataSerializer):
-
-    KEY_VALUE_SEPARATOR = '&'
+    KEY_VALUE_SEPARATOR = '='
     PAIR_SEPARATOR = ';'
 
     def __init__(self):
@@ -20,6 +20,12 @@ class PacketDataSerializer(IPacketDataSerializer):
             raise TypeError("Data must be a PacketData")
         string_io = StringIO()
         for key, value in data.attributes.items():
+            if value.find(self.PAIR_SEPARATOR) != -1:
+                raise InvalidPacketAttributeValueError(''.join(["Given attribute's '",
+                                                                key,
+                                                                "' value contains the pair separator character '",
+                                                                self.PAIR_SEPARATOR,
+                                                                "'"]))
             string_io.write(key)
             string_io.write(self.KEY_VALUE_SEPARATOR)
             string_io.write(value)
@@ -34,9 +40,11 @@ class PacketDataSerializer(IPacketDataSerializer):
         packet_data = PacketData()
         split_data = data.split(self.PAIR_SEPARATOR)
         for d in split_data:
-            key_value_pair = d.split(self.KEY_VALUE_SEPARATOR)
-            # skip if the key value pair is invalid
-            if len(key_value_pair) != 2:
+            length = len(d)
+            split_index = d.find(self.KEY_VALUE_SEPARATOR)
+            if split_index == -1 or split_index == length - 1:
                 continue
-            packet_data.AddAttribute(key_value_pair[0], key_value_pair[1])
+            key = d[0: split_index]
+            value = d[split_index + 1:]
+            packet_data.AddAttribute(key, value)
         return packet_data

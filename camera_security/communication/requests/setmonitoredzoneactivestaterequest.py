@@ -20,7 +20,7 @@ class SetMonitoredZoneActiveStateRequest(RequestWithAuthentication):
         zone_name = data.GetAttribute(PacketAttribute.ZONE_NAME)
         if zone_name is None:
             default_responses.GetInvalidAttributeInPacketResponse(PacketAttribute.ZONE_NAME)
-        zone_state = data.AddAttribute(PacketAttribute.ZONE_ACTIVE)
+        zone_state = data.GetAttribute(PacketAttribute.ZONE_ACTIVE)
         if zone_state is None:
             default_responses.GetInvalidAttributeInPacketResponse(PacketAttribute.ZONE_ACTIVE)
 
@@ -32,7 +32,7 @@ class SetMonitoredZoneActiveStateRequest(RequestWithAuthentication):
             packet.AddAttribute(PacketAttribute.MESSAGE, "Could not find zone with the given name")
             return packet
 
-        zone.SetActive(zone_state == "true")
+        self.__monitoring_facade.SetZoneActiveState(zone_name, zone_state == "true")
         packet.AddAttribute(PacketAttribute.CODE, str(ResponseCode.OK.value))
         packet.AddAttribute(PacketAttribute.MESSAGE, "Monitored zone active state set successfully")
         return packet

@@ -2,8 +2,6 @@
 # Describes the attributes the packet can have
 # Author: Lukas Žaromskis
 
-from enum import Enum
-
 
 class PacketAttribute:
     CODE = "code"

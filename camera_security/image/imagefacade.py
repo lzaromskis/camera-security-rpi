@@ -47,3 +47,6 @@ class ImageFacade:
         Returns the previously processed frame
         """
         return self.__camera_accessor.GetFrame()
+
+    def RefreshFrame(self):
+        self.__camera_accessor.GetNewFrame()

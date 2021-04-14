@@ -2,14 +2,14 @@
 # Describes the packet data class
 # Author: Lukas Žaromskis
 
-from typing import Optional
+from typing import Optional, Dict
 from camera_security.communication.packetattribute import PacketAttribute
 
 
 class PacketData:
 
     def __init__(self):
-        self.attributes = dict()
+        self.attributes: Dict[str, str] = dict()
 
     def AddAttribute(self, attribute_name: str, attribute_data: str):
         """

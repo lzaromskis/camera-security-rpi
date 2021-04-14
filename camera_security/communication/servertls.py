@@ -10,6 +10,8 @@ import socket
 import threading
 import ssl
 
+from camera_security.utility.loglevel import LogLevel
+
 
 class ServerTLS(IServer):
 
@@ -46,18 +48,23 @@ class ServerTLS(IServer):
         tls_sock = self.__context.wrap_socket(self.__sock, server_side=True)
         while self.__running:
             self.__logger.Log("Accepting connection...")
-            connection, client_address = tls_sock.accept()
             try:
-                self.__logger.Log("Received connection from " + str(client_address))
-                data = connection.recv(1024)
-                if data:
-                    str_data = data.decode()
-                    try:
-                        response = self.__request_executor.ExecuteRequest(str_data)
-                    except RequestNotFoundError as e:
-                        self.__logger.Log(e.message)
-                        response = e.response
-                    self.__logger.Log("Sending data to " + str(client_address))
-                    connection.sendall(str.encode(response))
-            finally:
-                connection.close()
+                connection, client_address = tls_sock.accept()
+                try:
+                    self.__logger.Log("Received connection from " + str(client_address))
+                    data = connection.recv(1024)
+                    if data:
+                        str_data = data.decode()
+                        try:
+                            response = self.__request_executor.ExecuteRequest(str_data)
+                        except RequestNotFoundError as e:
+                            self.__logger.Log(e.message)
+                            response = e.response
+                        self.__logger.Log("Sending data to " + str(client_address))
+                        size = len(response)
+                        self.__logger.Log("Response size: " + str(size) + " B (" + str(size / 1024) + " KB)")
+                        connection.sendall(str.encode(''.join(["{:08d}".format(size), response])))
+                finally:
+                    connection.close()
+            except ssl.SSLError as err:
+                self.__logger.Log("SSL error raised: " + str(err.args), LogLevel.ERROR)

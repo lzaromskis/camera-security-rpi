@@ -2,3 +2,4 @@ setuptools~=53.0.0
 numpy~=1.20.1
 tflite_runtime~=2.5.0
 opencv-python~=4.5.1.48
+simple-websocket-server~=0.4.1

@@ -10,9 +10,6 @@ from camera_security.communication.packetattribute import PacketAttribute
 
 class DefaultResponses(IDefaultResponses):
 
-    def __init__(self):
-        pass
-
     def GetInvalidPacketResponse(self) -> PacketData:
         packet = PacketData()
         packet.AddAttribute(PacketAttribute.CODE, str(ResponseCode.INVALID_PACKET.value))

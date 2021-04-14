@@ -3,14 +3,21 @@
 # Author: Lukas Žaromskis
 import traceback
 from datetime import datetime
+from socket import gethostname
+from time import sleep
 
 from camera_security.authentication.authenticationfacade import AuthenticationFacade
+from camera_security.communication.alertserver import AlertServer
+from camera_security.communication.alertservertls import AlertServerTLS
+from camera_security.communication.ialertserver import IAlertServer
 from camera_security.communication.iserver import IServer
 from camera_security.communication.requestexecutor import RequestExecutor
 from camera_security.communication.requests.addmonitoredzonerequest import AddMonitoredZoneRequest
 from camera_security.communication.requests.changepasswordrequest import ChangePasswordRequest
+from camera_security.communication.requests.getalertimagerequest import GetAlertImageRequest
 from camera_security.communication.requests.getallmonitoredzonesrequest import GetAllMonitoredZonesRequest
 from camera_security.communication.requests.getimagerequest import GetImageRequest
+from camera_security.communication.requests.getlatestalertsrequest import GetLatestAlertsRequest
 from camera_security.communication.requests.loginrequest import LoginRequest
 from camera_security.communication.requests.removemonitoredzonerequest import RemoveMonitoredZoneRequest
 from camera_security.communication.requests.requestcode import RequestCode
@@ -18,6 +25,8 @@ from camera_security.communication.requests.setmonitoredzoneactivestaterequest i
 from camera_security.communication.responses.defaultresponses import DefaultResponses
 from camera_security.communication.serializers.packetdataserializer import PacketDataSerializer
 from camera_security.communication.server import Server
+from camera_security.communication.servertls import ServerTLS
+from camera_security.communication.websocketmessages import WebsocketMessages
 from camera_security.image.imagefacade import ImageFacade
 from camera_security.image.processing.resizeboundingboxes import ResizeBoundingBoxes
 from camera_security.image.processing.resultfilterbycertainty import ResultFilterByCertainty
@@ -33,6 +42,7 @@ from camera_security.utility.exceptions.custombaseexception import CustomBaseExc
 from camera_security.utility.ilogger import ILogger
 from camera_security.utility.loglevel import LogLevel
 from camera_security.utility.serializers.boundingboxserializer import BoundingBoxSerializer
+from camera_security.utility.serializers.stringlistserializer import StringListSerializer
 
 
 class CameraSecurity:
@@ -41,12 +51,13 @@ class CameraSecurity:
         self.__logger: ILogger = None
         self.__auth_facade: AuthenticationFacade = None
         self.__server: IServer = None
+        self.__alert_server: IAlertServer = None
         self.__image_facade: ImageFacade = None
         self.__monitoring_facade: MonitoringFacade = None
         self.__alerts_facade: AlertsFacade = None
 
         # variables for processing steps
-        self.__timeout = 0
+        self.__timeout = 10
         self.__detection_count = 0
         self.__detection_threshold = 2
         self.__previous_detection_state = False
@@ -75,6 +86,8 @@ class CameraSecurity:
         finally:
             # try to send a message to client that the server shut down
             self.__logger.Log("Sending message to client that server is closing...")
+            self.__alert_server.SendMessage(WebsocketMessages.CLOSE)
+            sleep(2)
             self.__logger.Log("Shutting down...")
 
     def __Initialize(self, settings: Settings):
@@ -105,6 +118,7 @@ class CameraSecurity:
         bounds_serializer = BoundingBoxSerializer()
         zone_serializer = MonitoredZoneSerializer(bounds_serializer)
         zones_serializer = MonitoredZoneCollectionSerializer(zone_serializer)
+        string_list_serializer = StringListSerializer()
 
         # Setup executors
         self.__logger.Log("Setting up executors")
@@ -116,17 +130,37 @@ class CameraSecurity:
         executor.RegisterRequest(RequestCode.CREATE_ZONE, AddMonitoredZoneRequest(self.__monitoring_facade, zone_serializer))
         executor.RegisterRequest(RequestCode.SET_ZONE_ACTIVITY, SetMonitoredZoneActiveStateRequest(self.__monitoring_facade))
         executor.RegisterRequest(RequestCode.DELETE_ZONE, RemoveMonitoredZoneRequest(self.__monitoring_facade))
+        executor.RegisterRequest(RequestCode.GET_ALERT_LIST, GetLatestAlertsRequest(self.__alerts_facade, string_list_serializer))
+        executor.RegisterRequest(RequestCode.GET_ALERT_IMAGE, GetAlertImageRequest(self.__alerts_facade, jpg_frame_serializer))
 
-        # Create server
-        self.__logger.Log("Creating server...")
-        self.__server = Server("DELL", 7500, executor, self.__logger)
+        # Create servers
+        self.__logger.Log("Creating servers...")
+        if settings.settings_dict[settings.USE_TLS_KEY] == "true":
+            self.__logger.Log("Using TLS for server...")
+            cert_file = settings.settings_dict[settings.CERT_FILE_KEY]
+            key_file = settings.settings_dict[settings.KEY_FILE_KEY]
+            self.__server = ServerTLS("127.0.0.1", 7500, cert_file, key_file, executor, self.__logger)
+            self.__alert_server = AlertServerTLS("127.0.0.1", 7501, cert_file, key_file, self.__logger)
+            # self.__server = ServerTLS(gethostname(), 7500, cert_file, key_file, executor, self.__logger)
+            # self.__alert_server = AlertServerTLS(gethostname(), 7501, cert_file, key_file, self.__logger)
+        else:
+            self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
+            self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
+            # self.__server = Server(gethostname(), 7500, executor, self.__logger)
+            # self.__alert_server = AlertServer(gethostname(), 7501, self.__auth_facade)
+
+        #self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
 
     def __Run(self):
         self.__server.StartListening()
+        self.__alert_server.StartListening()
         while True:
             self.__ProcessStep()
 
     def __ProcessStep(self):
+        if self.__monitoring_facade.GetActiveZoneCount() == 0:
+            self.__image_facade.RefreshFrame()
+            return
         detections = self.__image_facade.ProcessFrame()
         collisions = self.__monitoring_facade.GetCollidingZones(detections)
         detection_state = len(collisions) != 0
@@ -143,5 +177,5 @@ class CameraSecurity:
                     self.__logger.Log(''.join(["Detected object in zone '", zone.GetName(), "'!"]))
                 self.__previous_saved_detection_time = current_time
                 image = self.__image_facade.GetFrame()
-                self.__alerts_facade.SaveAlert(image)
-                # TODO: send alert to client
+                #self.__alerts_facade.SaveAlert(image)
+                self.__alert_server.SendMessage(WebsocketMessages.ALERT)

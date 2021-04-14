@@ -27,6 +27,7 @@ class MonitoringFacade:
         zone = self.__monitored_zones.GetZone(zone_name)
         if zone:
             zone.SetActive(active)
+            self.__monitored_zones_io.SaveMonitoredZones(self.__monitored_zones, self.__monitored_zones_filename)
 
     def AddZone(self, zone: MonitoredZone) -> bool:
         if self.__monitored_zones.AddZone(zone):
@@ -40,7 +41,7 @@ class MonitoringFacade:
     def RemoveZone(self, zone_name: str) -> bool:
         ret_val = self.__monitored_zones.RemoveZone(zone_name)
         if ret_val:
-            self.__monitored_zones_io.SaveMonitoredZones(self.__monitored_zones_filename)
+            self.__monitored_zones_io.SaveMonitoredZones(self.__monitored_zones, self.__monitored_zones_filename)
         return ret_val
 
     def GetCollidingZones(self, detected: List[DetectionData]) -> List[MonitoredZone]:
@@ -59,3 +60,10 @@ class MonitoringFacade:
 
     def GetCollection(self) -> MonitoredZoneCollection:
         return self.__monitored_zones
+
+    def GetActiveZoneCount(self) -> int:
+        count = 0
+        for zone in self.__monitored_zones.GetAllZones():
+            if zone.IsActive():
+                count = count + 1
+        return count

@@ -17,7 +17,7 @@ class PacketDataSerializerTests(unittest.TestCase):
         # Arrange
         data = PacketData()
         data.attributes = self.attributes
-        expected = "key1&value1;key2&value2;key3&value3;"
+        expected = "key1=value1;key2=value2;key3=value3;"
 
         # Act
         result = self.serializer.Serialize(data)
@@ -27,7 +27,7 @@ class PacketDataSerializerTests(unittest.TestCase):
 
     def test_Deserialize(self):
         # Arrange
-        data = "key1&value1;key2&value2;key3&value3;"
+        data = "key1=value1;key2=value2;key3=value3;"
         expected = self.attributes
 
         # Act
@@ -38,6 +38,27 @@ class PacketDataSerializerTests(unittest.TestCase):
         for k, v in result.attributes.items():
             self.assertEqual(expected[k], v)
 
+    def test_DeserializeInvalid_1(self):
+        # Arrange
+        data = "key1,value1;"
+        expected = self.attributes
+
+        # Act
+        result = self.serializer.Deserialize(data)
+
+        # Assert
+        self.assertEqual(0, len(result.attributes))
+
+    def test_DeserializerInvalid_2(self):
+        # Arrange
+        data = "key1=;"
+        expected = self.attributes
+
+        # Act
+        result = self.serializer.Deserialize(data)
+
+        # Assert
+        self.assertEqual(0, len(result.attributes))
 
 if __name__ == '__main__':
     unittest.main()

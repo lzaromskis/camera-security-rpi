@@ -9,6 +9,8 @@ class PacketAttribute:
     PASSWORD_NEW = "password_new"
     SECRET = "secret"
     IMAGE = "image"
+    DRAW_ZONES = "draw_zones"
+    DRAW_DETECTIONS = "draw_detections"
     MESSAGE = "message"
     ZONES = "monitored_zones"
     ZONE = "zone"

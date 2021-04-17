@@ -26,6 +26,9 @@ class Settings:
     ALERTS_FOLDER_KEY = "alerts_folder"
     ALERTS_TO_KEEP_KEY = "alerts_to_keep"
     ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY = "alert_triggered_timeout_seconds"
+    EMAIL_SERVER_NAME = "email_server_name"
+    EMAIL_SERVER_PASSWORD = "email_server_password"
+    EMAIL_CLIENT_NAME = "email_client_name"
 
     def __init__(self, settings_file: Optional[str] = None):
         # Initialize dictionary with default values
@@ -47,6 +50,9 @@ class Settings:
         self.settings_dict[self.ALERTS_FOLDER_KEY] = "./alerts/"
         self.settings_dict[self.ALERTS_TO_KEEP_KEY] = "10"
         self.settings_dict[self.ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY] = "30"
+        self.settings_dict[self.EMAIL_SERVER_NAME] = ""
+        self.settings_dict[self.EMAIL_SERVER_PASSWORD] = ""
+        self.settings_dict[self.EMAIL_CLIENT_NAME] = ""
 
         # If a file was given, read data from it
         if settings_file:

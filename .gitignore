@@ -10,6 +10,9 @@ __pycache__/
 *.crt
 *.key
 
+# Settings file
+camera_security/settings.ini
+
 # Distribution / packaging
 .idea/
 .Python

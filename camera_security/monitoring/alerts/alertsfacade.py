@@ -18,7 +18,7 @@ class AlertsFacade:
         """
         Saves the given frame to a file
         """
-        time = datetime.utcnow()
+        time = datetime.now()
         time_str = time.strftime("%Y-%m-%d_%H-%M-%S_%f")
         data = AlertData(time_str, image)
         self.__alert_io.SaveAlert(data)

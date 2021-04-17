@@ -20,6 +20,7 @@ class GetLatestAlertsRequest(RequestWithAuthentication):
 
     def _ProcessRequest(self, data: PacketData, auth_facade: AuthenticationFacade, default_responses: IDefaultResponses) -> PacketData:
         alerts = self.__alerts_facade.GetAvailableAlerts()
+        alerts.sort(reverse=True)
         packet = PacketData()
         packet.AddAttribute(PacketAttribute.CODE, str(ResponseCode.OK.value))
         packet.AddAttribute(PacketAttribute.MESSAGE, "Sending latest alerts")

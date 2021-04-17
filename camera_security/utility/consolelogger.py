@@ -2,11 +2,9 @@
 # Implements the ILogger interface to log messages into console
 # Author: Lukas Žaromskis
 
-
 from camera_security.utility.ilogger import ILogger
 from threading import Lock
 from datetime import datetime
-
 from camera_security.utility.loglevel import LogLevel
 
 

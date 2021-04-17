@@ -2,6 +2,7 @@
 # Describes the ImageFacade class for controlling the image getting and processing subsystem
 # Author: Lukas Žaromskis
 
+from threading import Lock
 from typing import List
 from camera_security.image.frame import Frame
 from camera_security.image.icameraaccessor import ICameraAccessor
@@ -20,6 +21,8 @@ class ImageFacade:
         self.__camera_accessor: ICameraAccessor = OpenCVCameraAccessor(camera_id, 640, 480)
         self.__frame_processor: IFrameProcessor = TensorflowProcessor(model_filename, labels_filename, self.__logger)
         self.__result_filters: List[IResultFilter] = list()
+        self.__detection_cache: List[DetectionData] = list()
+        self.__lock = Lock()
 
     def RegisterFilter(self, filter: IResultFilter):
         """
@@ -40,6 +43,18 @@ class ImageFacade:
         for filter in self.__result_filters:
             data = filter.Filter(data)
 
+        self.__lock.acquire()
+        self.__detection_cache = data
+        self.__lock.release()
+        return data
+
+    def GetPreviousDetections(self) -> List[DetectionData]:
+        """
+        Returns the previous detection results
+        """
+        self.__lock.acquire()
+        data = self.__detection_cache
+        self.__lock.release()
         return data
 
     def GetFrame(self) -> Frame:

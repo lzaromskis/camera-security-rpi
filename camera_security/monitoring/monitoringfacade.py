@@ -1,5 +1,5 @@
-# monitoring.py | camera-security-rpi
-# Describes the MonitoringFacade class for controlling the monitoring zones facade
+# monitoringfacade.py | camera-security-rpi
+# Describes the MonitoringFacade class for controlling the actions with monitored zones
 # Author: Lukas Žaromskis
 from typing import List, Optional
 
@@ -48,9 +48,11 @@ class MonitoringFacade:
         ret_list = list()
         for zone in self.__monitored_zones.GetAllZones():
             if zone.IsActive():
+                labels = zone.GetLabels()
                 bounds = zone.GetBounds()
                 for d in detected:
-                    if bounds.IsColliding(d.GetBoundingBox()):
+                    detected_label = d.GetLabel()
+                    if detected_label in labels and bounds.IsColliding(d.GetBoundingBox()):
                         ret_list.append(zone)
                         break
         return ret_list

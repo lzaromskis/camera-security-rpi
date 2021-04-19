@@ -26,3 +26,16 @@ class BoundingBox:
         Each corner contains the x and y coordinates
         """
         return self.__top_left, self.__bottom_right
+
+    def GetCoordinatesInPixels(self, width: int, height: int) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+        """
+        Returns the coordinates converted to pixels based on the given size.
+        First element is top left corner.
+        Second element is bottom right corner.
+        Each corner contains the x and y coordinates
+        """
+        top_left_x = int(self.__top_left[0] * width)
+        top_left_y = int(self.__top_left[1] * height)
+        bottom_right_x = int(self.__bottom_right[0] * width)
+        bottom_right_y = int(self.__bottom_right[1] * height)
+        return (top_left_x, top_left_y), (bottom_right_x, bottom_right_y)

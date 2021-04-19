@@ -18,3 +18,4 @@ class PacketAttribute:
     ZONE_ACTIVE = "zone_active"
     ALERT_LIST = "alert_list"
     ALERT = "alert"
+    LABELS = "labels"

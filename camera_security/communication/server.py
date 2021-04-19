@@ -9,6 +9,8 @@ from camera_security.utility.ilogger import ILogger
 import socket
 import threading
 
+from camera_security.utility.loglevel import LogLevel
+
 
 class Server(IServer):
 
@@ -53,5 +55,7 @@ class Server(IServer):
                     size = len(response)
                     self.__logger.Log("Response size: " + str(size) + " B (" + str(size / 1024) + " KB)")
                     connection.sendall(str.encode(''.join(["{:08d}".format(size), response])))
+            except Exception as ex:
+                self.__logger.Log("Caught unhandled exception while processing a request: " + str(ex.args), LogLevel.ERROR)
             finally:
                 connection.close()

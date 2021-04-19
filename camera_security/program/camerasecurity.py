@@ -17,6 +17,8 @@ from camera_security.communication.requests.addmonitoredzonerequest import AddMo
 from camera_security.communication.requests.changepasswordrequest import ChangePasswordRequest
 from camera_security.communication.requests.getalertimagerequest import GetAlertImageRequest
 from camera_security.communication.requests.getallmonitoredzonesrequest import GetAllMonitoredZonesRequest
+from camera_security.communication.requests.getdataforcreatingzonerequest import GetDataForCreatingZoneRequest
+from camera_security.communication.requests.getheatmaprequest import GetHeatmapRequest
 from camera_security.communication.requests.getimagerequest import GetImageRequest
 from camera_security.communication.requests.getlatestalertsrequest import GetLatestAlertsRequest
 from camera_security.communication.requests.loginrequest import LoginRequest
@@ -38,6 +40,7 @@ from camera_security.monitoring.alerts.alertsfacade import AlertsFacade
 from camera_security.monitoring.alerts.ialertaction import IAlertAction
 from camera_security.monitoring.alerts.savealertaction import SaveAlertAction
 from camera_security.monitoring.alerts.serveralertaction import ServerAlertAction
+from camera_security.monitoring.heatmap.heatmapfacade import HeatmapFacade
 from camera_security.monitoring.monitoringfacade import MonitoringFacade
 from camera_security.monitoring.serializers.monitoredzonecollectionserializer import MonitoredZoneCollectionSerializer
 from camera_security.monitoring.serializers.monitoredzoneserializer import MonitoredZoneSerializer
@@ -61,9 +64,10 @@ class CameraSecurity:
         self.__monitoring_facade: MonitoringFacade = None
         self.__alerts_facade: AlertsFacade = None
         self.__alert_actions: List[IAlertAction] = list()
+        self.__heatmap_facade: HeatmapFacade = None
 
         # variables for processing steps
-        self.__timeout = 30
+        self.__timeout = 10
         self.__detection_count = 0
         self.__detection_threshold = 2
         self.__previous_detection_state = False
@@ -113,6 +117,8 @@ class CameraSecurity:
         self.__alerts_facade = AlertsFacade(settings.settings_dict[settings.ALERTS_FOLDER_KEY],
                                             int(settings.settings_dict[settings.ALERTS_TO_KEEP_KEY]))
 
+        self.__heatmap_facade = HeatmapFacade(30)
+
         # Setup filters
         self.__logger.Log("Setting up filters...")
         self.__image_facade.RegisterFilter(ResultFilterByLabel(settings.settings_dict[settings.ACCEPTED_LABELS_KEY].split(',')))
@@ -134,13 +140,20 @@ class CameraSecurity:
         executor = RequestExecutor(PacketDataSerializer(), self.__auth_facade, DefaultResponses())
         executor.RegisterRequest(RequestCode.LOGIN, LoginRequest())
         executor.RegisterRequest(RequestCode.CHANGE_PASSWORD, ChangePasswordRequest())
-        executor.RegisterRequest(RequestCode.GET_IMAGE, GetImageRequest(self.__image_facade, self.__monitoring_facade, image_drawer, jpg_frame_serializer))
+        executor.RegisterRequest(RequestCode.GET_IMAGE, GetImageRequest(self.__image_facade,
+                                                                        self.__monitoring_facade,
+                                                                        image_drawer,
+                                                                        jpg_frame_serializer))
         executor.RegisterRequest(RequestCode.GET_ZONES, GetAllMonitoredZonesRequest(self.__monitoring_facade, zones_serializer))
         executor.RegisterRequest(RequestCode.CREATE_ZONE, AddMonitoredZoneRequest(self.__monitoring_facade, zone_serializer))
         executor.RegisterRequest(RequestCode.SET_ZONE_ACTIVITY, SetMonitoredZoneActiveStateRequest(self.__monitoring_facade))
         executor.RegisterRequest(RequestCode.DELETE_ZONE, RemoveMonitoredZoneRequest(self.__monitoring_facade))
         executor.RegisterRequest(RequestCode.GET_ALERT_LIST, GetLatestAlertsRequest(self.__alerts_facade, string_list_serializer))
         executor.RegisterRequest(RequestCode.GET_ALERT_IMAGE, GetAlertImageRequest(self.__alerts_facade, jpg_frame_serializer))
+        executor.RegisterRequest(RequestCode.CREATE_ZONE_INIT,
+                                 GetDataForCreatingZoneRequest(settings.settings_dict[settings.ACCEPTED_LABELS_KEY],
+                                                               self.__image_facade,
+                                                               jpg_frame_serializer))
 
         # Create servers
         self.__logger.Log("Creating servers...")
@@ -156,7 +169,7 @@ class CameraSecurity:
             self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
             self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
             #self.__server = Server(gethostname(), 7500, executor, self.__logger)
-            # self.__alert_server = AlertServer(gethostname(), 7501, self.__auth_facade)
+            #self.__alert_server = AlertServer(gethostname(), 7501, self.__logger)
 
         # Setup alert actions
         self.__logger.Log("Setting up alert actions...")
@@ -166,14 +179,20 @@ class CameraSecurity:
     def __Run(self):
         self.__server.StartListening()
         self.__alert_server.StartListening()
+        delta_time = 0.0
+        previous_step_time = datetime.now()
         while True:
-            self.__ProcessStep()
+            self.__ProcessStep(delta_time)
+            current_time = datetime.now()
+            time_diff = current_time - previous_step_time
+            delta_time = time_diff.total_seconds()
+            previous_step_time = current_time
 
-    def __ProcessStep(self):
-        if self.__monitoring_facade.GetActiveZoneCount() == 0:
-            self.__image_facade.RefreshFrame()
-            return
+    def __ProcessStep(self, delta_time: float):
         detections = self.__image_facade.ProcessFrame()
+        self.__heatmap_facade.AddData(detections, delta_time)
+        if self.__monitoring_facade.GetActiveZoneCount() == 0:
+            return
         collisions = self.__monitoring_facade.GetCollidingZones(detections)
         detection_state = len(collisions) != 0
         if self.__previous_detection_state == detection_state:
@@ -192,5 +211,3 @@ class CameraSecurity:
                 alert_data = dict(image=image_obj)
                 for action in self.__alert_actions:
                     action.Execute(**alert_data)
-                # self.__alerts_facade.SaveAlert(image)
-                # self.__alert_server.SendMessage(WebsocketMessages.ALERT)

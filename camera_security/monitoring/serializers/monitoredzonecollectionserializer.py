@@ -20,18 +20,23 @@ class MonitoredZoneCollectionSerializer(IMonitoredZoneCollectionSerializer):
         if type(data) != MonitoredZoneCollection:
             raise TypeError("Data is not a MonitoredZoneCollection")
         zones = data.GetAllZones()
-        if len(zones) == 0:
-            return "empty"
-        if len(zones) == 1:
-            return self.__zone_serializer.Serialize(zones[0])
-        string_io = StringIO()
-        for zone in zones[:-1]:
-            string_io.write(self.__zone_serializer.Serialize(zone))
-            string_io.write(self.ZONE_SEPARATOR)
-        string_io.write(self.__zone_serializer.Serialize(zones[-1]))
-        string_data = string_io.getvalue()
-        string_io.close()
-        return string_data
+        serialized_zones = list()
+        for zone in zones:
+            serialized_zones.append(self.__zone_serializer.Serialize(zone))
+        return self.ZONE_SEPARATOR.join(serialized_zones)
+
+        # if len(zones) == 0:
+        #     return "empty"
+        # if len(zones) == 1:
+        #     return self.__zone_serializer.Serialize(zones[0])
+        # string_io = StringIO()
+        # for zone in zones[:-1]:
+        #     string_io.write(self.__zone_serializer.Serialize(zone))
+        #     string_io.write(self.ZONE_SEPARATOR)
+        # string_io.write(self.__zone_serializer.Serialize(zones[-1]))
+        # string_data = string_io.getvalue()
+        # string_io.close()
+        # return string_data
 
     def Deserialize(self, data: str) -> MonitoredZoneCollection:
         try:

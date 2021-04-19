@@ -13,7 +13,7 @@ class IFrameProcessor(ABC):
     @abstractmethod
     def ProcessFrame(self, frame: Frame) -> List[DetectionData]:
         """
-        Process
+        Process the given frame
         """
         raise NotImplementedError()
 

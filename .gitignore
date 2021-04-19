@@ -6,7 +6,15 @@ __pycache__/
 # C extensions
 *.so
 
+# SSL keys
+*.crt
+*.key
+
+# Settings file
+camera_security/settings.ini
+
 # Distribution / packaging
+.idea/
 .Python
 build/
 develop-eggs/

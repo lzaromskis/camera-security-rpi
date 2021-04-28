@@ -10,7 +10,7 @@ from camera_security.utility.loglevel import LogLevel
 class ILogger(ABC):
 
     @abstractmethod
-    def Log(self, message: str, level: LogLevel = LogLevel.NONE):
+    def Log(self, message: str, level: LogLevel = LogLevel.INFO):
         """
         Logs message
         """

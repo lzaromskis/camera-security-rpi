@@ -10,7 +10,7 @@ from camera_security.image.iimagedrawer import IImageDrawer
 from camera_security.utility.boundingbox import BoundingBox
 
 
-class ImageDrawer(IImageDrawer):
+class OpenCVImageDrawer(IImageDrawer):
     def DrawRectangle(self, frame: Frame, bounds: BoundingBox, colour: Tuple[int, int, int], thickness: int):
         data = frame.GetData()
         dimensions = data.shape

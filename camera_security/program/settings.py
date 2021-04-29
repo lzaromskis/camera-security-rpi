@@ -13,11 +13,8 @@ class Settings:
     HASH_METHOD_KEY = "hash_method"
     SECRET_GENERATION_METHOD_KEY = "secret_generation_method"
     LOGGER_TYPE_KEY = "logger_type"
-<<<<<<< HEAD
     FILE_LOGGER_FILE_KEY = "file_logger_file"
     FILE_LOGGER_APPEND_KEY = "file_logger_append"
-=======
->>>>>>> main
     USE_TLS_KEY = "use_tls"
     CERT_FILE_KEY = "cert"
     KEY_FILE_KEY = "key"
@@ -27,22 +24,13 @@ class Settings:
     CERTAINTY_THRESHOLD_KEY = "certainty_threshold"
     BOUNDS_RESIZE_PERCENTAGE_KEY = "bounds_resize_percentage"
     CAMERA_ID_KEY = "camera_id"
-<<<<<<< HEAD
     CAMERA_WIDTH_KEY = "camera_width"
     CAMERA_HEIGHT_KEY = "camera_height"
-=======
->>>>>>> main
     MONITORED_ZONES_FILENAME_KEY = "monitored_zones_file"
     ALERTS_FOLDER_KEY = "alerts_folder"
     ALERTS_TO_KEEP_KEY = "alerts_to_keep"
     ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY = "alert_triggered_timeout_seconds"
-<<<<<<< HEAD
     ALERT_DETECTION_THRESHOLD = "alert_detection_threshold"
-=======
-    EMAIL_SERVER_NAME = "email_server_name"
-    EMAIL_SERVER_PASSWORD = "email_server_password"
-    EMAIL_CLIENT_NAME = "email_client_name"
->>>>>>> main
 
     def __init__(self, settings_file: Optional[str] = None):
         # Initialize dictionary with default values
@@ -51,11 +39,8 @@ class Settings:
         self.settings_dict[self.HASH_METHOD_KEY] = "sha256"
         self.settings_dict[self.SECRET_GENERATION_METHOD_KEY] = "secretgenerator"
         self.settings_dict[self.LOGGER_TYPE_KEY] = "console"
-<<<<<<< HEAD
         self.settings_dict[self.FILE_LOGGER_FILE_KEY] = "camsec.log"
         self.settings_dict[self.FILE_LOGGER_APPEND_KEY] = "true"
-=======
->>>>>>> main
         self.settings_dict[self.USE_TLS_KEY] = "false"
         self.settings_dict[self.CERT_FILE_KEY] = "cert.crt"
         self.settings_dict[self.KEY_FILE_KEY] = "key.key"
@@ -65,22 +50,13 @@ class Settings:
         self.settings_dict[self.CERTAINTY_THRESHOLD_KEY] = "0.6"
         self.settings_dict[self.BOUNDS_RESIZE_PERCENTAGE_KEY] = "0.1"
         self.settings_dict[self.CAMERA_ID_KEY] = "0"
-<<<<<<< HEAD
         self.settings_dict[self.CAMERA_WIDTH_KEY] = "640"
         self.settings_dict[self.CAMERA_HEIGHT_KEY] = "480"
-=======
->>>>>>> main
         self.settings_dict[self.MONITORED_ZONES_FILENAME_KEY] = "zones.csmz"
         self.settings_dict[self.ALERTS_FOLDER_KEY] = "./alerts/"
         self.settings_dict[self.ALERTS_TO_KEEP_KEY] = "10"
         self.settings_dict[self.ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY] = "30"
-<<<<<<< HEAD
         self.settings_dict[self.ALERT_DETECTION_THRESHOLD] = "2"
-=======
-        self.settings_dict[self.EMAIL_SERVER_NAME] = ""
-        self.settings_dict[self.EMAIL_SERVER_PASSWORD] = ""
-        self.settings_dict[self.EMAIL_CLIENT_NAME] = ""
->>>>>>> main
 
         # If a file was given, read data from it
         if settings_file:
@@ -101,8 +77,4 @@ class Settings:
             # Only change existing keys. Do not add new keys
             if data[0] in self.settings_dict:
                 self.settings_dict[data[0]] = data[1]
-<<<<<<< HEAD
-=======
-
->>>>>>> main
         f.close()

@@ -13,8 +13,4 @@ class IAlertServer(ABC):
 
     @abstractmethod
     def SendMessage(self, message: str):
-<<<<<<< HEAD
         raise NotImplementedError()
-=======
-        raise NotImplementedError()
->>>>>>> main

@@ -11,12 +11,8 @@ class MonitoredZoneCollectionTests(unittest.TestCase):
         collection = MonitoredZoneCollection()
         name = "test_zone"
         bounds = BoundingBox(0, 0, 10, 10)
-<<<<<<< HEAD
         labels = ["test_label"]
         zone = MonitoredZone(name, bounds, labels)
-=======
-        zone = MonitoredZone(name, bounds)
->>>>>>> main
 
         # Act
         result = collection.AddZone(zone)
@@ -30,12 +26,8 @@ class MonitoredZoneCollectionTests(unittest.TestCase):
         collection = MonitoredZoneCollection()
         name = "test_zone"
         bounds = BoundingBox(0, 0, 10, 10)
-<<<<<<< HEAD
         labels = ["test_label"]
         zone = MonitoredZone(name, bounds, labels)
-=======
-        zone = MonitoredZone(name, bounds)
->>>>>>> main
 
         # Act
         result1 = collection.AddZone(zone)
@@ -51,12 +43,8 @@ class MonitoredZoneCollectionTests(unittest.TestCase):
         collection = MonitoredZoneCollection()
         name = "test_zone"
         bounds = BoundingBox(0, 0, 10, 10)
-<<<<<<< HEAD
         labels = ["test_label"]
         zone = MonitoredZone(name, bounds, labels)
-=======
-        zone = MonitoredZone(name, bounds)
->>>>>>> main
         collection._MonitoredZoneCollection__zones[name] = zone
 
         # Act
@@ -93,15 +81,10 @@ class MonitoredZoneCollectionTests(unittest.TestCase):
         name2 = "test_zone2"
         bounds1 = BoundingBox(0, 0, 10, 10)
         bounds2 = BoundingBox(0, 0, 20, 20)
-<<<<<<< HEAD
         labels1 = ["test_label1"]
         labels2 = ["test_label2"]
         zone1 = MonitoredZone(name1, bounds1, labels1)
         zone2 = MonitoredZone(name2, bounds2, labels2)
-=======
-        zone1 = MonitoredZone(name1, bounds1)
-        zone2 = MonitoredZone(name2, bounds2)
->>>>>>> main
         collection._MonitoredZoneCollection__zones[name1] = zone1
         collection._MonitoredZoneCollection__zones[name2] = zone2
 
@@ -118,12 +101,8 @@ class MonitoredZoneCollectionTests(unittest.TestCase):
         collection = MonitoredZoneCollection()
         name = "test_zone"
         bounds = BoundingBox(0, 0, 10, 10)
-<<<<<<< HEAD
         labels = ["test_label"]
         zone = MonitoredZone(name, bounds, labels)
-=======
-        zone = MonitoredZone(name, bounds)
->>>>>>> main
         collection._MonitoredZoneCollection__zones[name] = zone
 
         # Act

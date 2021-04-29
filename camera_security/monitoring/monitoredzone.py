@@ -43,9 +43,6 @@ class MonitoredZone:
         Sets the active state of the monitored zone
         """
         self.__active = active
-<<<<<<< HEAD
 
     def __eq__(self, other: 'MonitoredZone'):
         return self.__name == other.__name
-=======
->>>>>>> main

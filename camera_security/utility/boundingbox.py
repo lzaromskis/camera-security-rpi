@@ -1,11 +1,7 @@
 # boundingbox.py | camera-security-rpi
 # Describes the BoundingBox class for storing bounding box data
 # Author: Lukas Žaromskis
-<<<<<<< HEAD
 import math
-=======
-
->>>>>>> main
 from typing import Tuple
 
 
@@ -43,12 +39,9 @@ class BoundingBox:
         bottom_right_x = int(self.__bottom_right[0] * width)
         bottom_right_y = int(self.__bottom_right[1] * height)
         return (top_left_x, top_left_y), (bottom_right_x, bottom_right_y)
-<<<<<<< HEAD
 
     def __eq__(self, other: 'BoundingBox'):
         return math.isclose(self.__top_left[0], other.__top_left[0]) \
                and math.isclose(self.__top_left[1], other.__top_left[1]) \
                and math.isclose(self.__bottom_right[0], other.__bottom_right[0]) \
                and math.isclose(self.__bottom_right[1], other.__bottom_right[1])
-=======
->>>>>>> main

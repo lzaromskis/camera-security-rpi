@@ -15,23 +15,8 @@ class BoundingBoxSerializer(IBoundingBoxSerializer):
     def Serialize(self, data: BoundingBox) -> str:
         if type(data) != BoundingBox:
             raise TypeError("Data must be a BoundingBox")
-<<<<<<< HEAD
         top_left, bottom_right = data.GetCoordinates()
         return self.COORDINATE_SEPARATOR.join([str(top_left[0]), str(top_left[1]), str(bottom_right[0]), str(bottom_right[1])])
-=======
-        string_io = StringIO()
-        top_left, bottom_right = data.GetCoordinates()
-        string_io.write(''.join([str(top_left[0]),
-                                 self.COORDINATE_SEPARATOR,
-                                 str(top_left[1]),
-                                 self.COORDINATE_SEPARATOR,
-                                 str(bottom_right[0]),
-                                 self.COORDINATE_SEPARATOR,
-                                 str(bottom_right[1])]))
-        string_data = string_io.getvalue()
-        string_io.close()
-        return string_data
->>>>>>> main
 
     def Deserialize(self, data: str) -> BoundingBox:
         if type(data) != str:

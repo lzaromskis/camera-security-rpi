@@ -10,17 +10,11 @@ from camera_security.authentication.secretgenerator import SecretGenerator
 
 class AuthenticationFacade:
 
-<<<<<<< HEAD
     def __init__(self, password_io_method: str, password_file: str, secret_method: str, hash_method: str):
         builder = PasswordManagerBuilder()
         self.__passwordManager = builder.AddPasswordIO(password_io_method, password_file)\
                                         .AddSecretGenerator(secret_method)\
                                         .AddHash(hash_method).Build()
-=======
-    def __init__(self):
-        factory = PasswordManagerBuilder()
-        self.__passwordManager = factory.AddPasswordIO("passwordio", "password.cspw").Build()
->>>>>>> main
         self.__token = None
 
     def IsAuthenticated(self, secret: str) -> bool:

@@ -13,7 +13,7 @@ pip3 install numpy
 pip3 install simple-websocket-server
 pip3 install opencv-python
 
-tee /etc/apt/sources.list.d/coral-edgetpu.list
+echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 apt-get update
 apt-get install python3-tflite-runtime

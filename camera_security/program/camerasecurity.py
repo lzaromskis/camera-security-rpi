@@ -103,7 +103,7 @@ class CameraSecurity:
     def __Initialize(self, settings: Settings):
         self.__logger.Log("Setting up variables...")
         self.__timeout = float(settings.settings_dict[settings.ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY])
-        self.__detection_threshold = int(settings.settings_dict[settings.ALERT_DETECTION_THRESHOLD])
+        self.__detection_threshold = 2
 
         self.__logger.Log("Creating authentication subsystem...")
         self.__auth_facade = AuthenticationFacade("password_io",
@@ -130,7 +130,7 @@ class CameraSecurity:
         self.__logger.Log("Setting up filters...")
         self.__image_facade.RegisterFilter(ResultFilterByLabel(settings.settings_dict[settings.ACCEPTED_LABELS_KEY].split(',')))
         self.__image_facade.RegisterFilter(ResultFilterByCertainty(float(settings.settings_dict[settings.CERTAINTY_THRESHOLD_KEY])))
-        self.__image_facade.RegisterFilter(ResizeBoundingBoxes(float(settings.settings_dict[settings.BOUNDS_RESIZE_PERCENTAGE_KEY])))
+        self.__image_facade.RegisterFilter(ResizeBoundingBoxes(float(settings.settings_dict[settings.BOUNDS_RESIZE_COEFFICIENT_KEY])))
 
         # Prepare serializers
         jpg_frame_serializer = JpgBase64FrameSerializer()

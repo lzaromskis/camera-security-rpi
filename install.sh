@@ -32,7 +32,8 @@ if [ $? -ne 0 ]
   echo "While Tensorflow does not recommend install it through pip on Debian it is possible."
   echo "Other software using Tensorflow Lite may cause runtime failures."
   echo "Do you want to install Tensorflow Lite using pip? (y/n):"
-  read -n1r cont
+  read -rn1 cont
+  echo ""
   if [ "$cont" != 'y' ] && [ "$cont" != 'Y' ]
     then
     echo "Installation failed. Aborting..."

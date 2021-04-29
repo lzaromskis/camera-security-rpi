@@ -16,9 +16,15 @@ from camera_security.utility.ilogger import ILogger
 
 class ImageFacade:
 
+<<<<<<< HEAD
     def __init__(self, camera_id: int, camera_width: int, camera_height: int, model_filename: str, labels_filename: str, logger: ILogger):
         self.__logger = logger
         self.__camera_accessor: ICameraAccessor = OpenCVCameraAccessor(camera_id, camera_width, camera_height)
+=======
+    def __init__(self, camera_id: int, model_filename: str, labels_filename: str, logger: ILogger):
+        self.__logger = logger
+        self.__camera_accessor: ICameraAccessor = OpenCVCameraAccessor(camera_id, 640, 480)
+>>>>>>> main
         self.__frame_processor: IFrameProcessor = TensorflowProcessor(model_filename, labels_filename, self.__logger)
         self.__result_filters: List[IResultFilter] = list()
         self.__detection_cache: List[DetectionData] = list()
@@ -64,8 +70,11 @@ class ImageFacade:
         return self.__camera_accessor.GetFrame()
 
     def RefreshFrame(self):
+<<<<<<< HEAD
         """
         Puts a new frame to the processed frame cache
         (Should be called if processing is skipped)
         """
+=======
+>>>>>>> main
         self.__camera_accessor.GetNewFrame()

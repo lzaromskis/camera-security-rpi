@@ -1,9 +1,15 @@
 # camerasecurity.py | camera-security-rpi
 # The main class for the program. This class should be created and called from in main
 # Author: Lukas Žaromskis
+<<<<<<< HEAD
 
 import traceback
 from datetime import datetime
+=======
+import traceback
+from datetime import datetime
+from socket import gethostname
+>>>>>>> main
 from time import sleep
 from typing import List
 
@@ -18,6 +24,10 @@ from camera_security.communication.requests.changepasswordrequest import ChangeP
 from camera_security.communication.requests.getalertimagerequest import GetAlertImageRequest
 from camera_security.communication.requests.getallmonitoredzonesrequest import GetAllMonitoredZonesRequest
 from camera_security.communication.requests.getdataforcreatingzonerequest import GetDataForCreatingZoneRequest
+<<<<<<< HEAD
+=======
+from camera_security.communication.requests.getheatmaprequest import GetHeatmapRequest
+>>>>>>> main
 from camera_security.communication.requests.getimagerequest import GetImageRequest
 from camera_security.communication.requests.getlatestalertsrequest import GetLatestAlertsRequest
 from camera_security.communication.requests.loginrequest import LoginRequest
@@ -29,7 +39,11 @@ from camera_security.communication.serializers.packetdataserializer import Packe
 from camera_security.communication.server import Server
 from camera_security.communication.servertls import ServerTLS
 from camera_security.communication.websocketmessages import WebsocketMessages
+<<<<<<< HEAD
 from camera_security.image.opencvimagedrawer import OpenCVImageDrawer
+=======
+from camera_security.image.imagedrawer import ImageDrawer
+>>>>>>> main
 from camera_security.image.imagefacade import ImageFacade
 from camera_security.image.processing.resizeboundingboxes import ResizeBoundingBoxes
 from camera_security.image.processing.resultfilterbycertainty import ResultFilterByCertainty
@@ -39,13 +53,23 @@ from camera_security.monitoring.alerts.alertsfacade import AlertsFacade
 from camera_security.monitoring.alerts.ialertaction import IAlertAction
 from camera_security.monitoring.alerts.savealertaction import SaveAlertAction
 from camera_security.monitoring.alerts.serveralertaction import ServerAlertAction
+<<<<<<< HEAD
+=======
+from camera_security.monitoring.heatmap.heatmapfacade import HeatmapFacade
+>>>>>>> main
 from camera_security.monitoring.monitoringfacade import MonitoringFacade
 from camera_security.monitoring.serializers.monitoredzonecollectionserializer import MonitoredZoneCollectionSerializer
 from camera_security.monitoring.serializers.monitoredzoneserializer import MonitoredZoneSerializer
 from camera_security.program.settings import Settings
+<<<<<<< HEAD
 from camera_security.utility.exceptions.custombaseexception import CustomBaseException
 from camera_security.utility.ilogger import ILogger
 from camera_security.utility.loggerfactory import LoggerFactory
+=======
+from camera_security.utility.consolelogger import ConsoleLogger
+from camera_security.utility.exceptions.custombaseexception import CustomBaseException
+from camera_security.utility.ilogger import ILogger
+>>>>>>> main
 from camera_security.utility.loglevel import LogLevel
 from camera_security.utility.serializers.boundingboxserializer import BoundingBoxSerializer
 from camera_security.utility.serializers.stringlistserializer import StringListSerializer
@@ -62,6 +86,10 @@ class CameraSecurity:
         self.__monitoring_facade: MonitoringFacade = None
         self.__alerts_facade: AlertsFacade = None
         self.__alert_actions: List[IAlertAction] = list()
+<<<<<<< HEAD
+=======
+        self.__heatmap_facade: HeatmapFacade = None
+>>>>>>> main
 
         # variables for processing steps
         self.__timeout = 10
@@ -71,10 +99,14 @@ class CameraSecurity:
         self.__previous_saved_detection_time = datetime.utcnow()
 
     def Start(self, settings: Settings):
+<<<<<<< HEAD
         logger_factory = LoggerFactory()
         self.__logger = logger_factory.GetLogger(settings.settings_dict[settings.LOGGER_TYPE_KEY],
                                                  file=settings.settings_dict[settings.FILE_LOGGER_FILE_KEY],
                                                  append=settings.settings_dict[settings.FILE_LOGGER_APPEND_KEY])
+=======
+        self.__logger = ConsoleLogger()
+>>>>>>> main
         self.__logger.Log("Initializing...")
         try:
             self.__Initialize(settings)
@@ -101,6 +133,7 @@ class CameraSecurity:
             self.__logger.Log("Shutting down...")
 
     def __Initialize(self, settings: Settings):
+<<<<<<< HEAD
         self.__logger.Log("Setting up variables...")
         self.__timeout = float(settings.settings_dict[settings.ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY])
         self.__detection_threshold = int(settings.settings_dict[settings.ALERT_DETECTION_THRESHOLD])
@@ -115,6 +148,13 @@ class CameraSecurity:
         self.__image_facade = ImageFacade(int(settings.settings_dict[settings.CAMERA_ID_KEY]),
                                           int(settings.settings_dict[settings.CAMERA_WIDTH_KEY]),
                                           int(settings.settings_dict[settings.CAMERA_HEIGHT_KEY]),
+=======
+        self.__logger.Log("Creating authentication subsystem...")
+        self.__auth_facade = AuthenticationFacade()
+
+        self.__logger.Log("Creating image subsystem...")
+        self.__image_facade = ImageFacade(int(settings.settings_dict[settings.CAMERA_ID_KEY]),
+>>>>>>> main
                                           settings.settings_dict[settings.TENSOR_MODEL_FILE_KEY],
                                           settings.settings_dict[settings.TENSOR_LABELS_FILE_KEY],
                                           self.__logger)
@@ -126,6 +166,11 @@ class CameraSecurity:
         self.__alerts_facade = AlertsFacade(settings.settings_dict[settings.ALERTS_FOLDER_KEY],
                                             int(settings.settings_dict[settings.ALERTS_TO_KEEP_KEY]))
 
+<<<<<<< HEAD
+=======
+        self.__heatmap_facade = HeatmapFacade(30)
+
+>>>>>>> main
         # Setup filters
         self.__logger.Log("Setting up filters...")
         self.__image_facade.RegisterFilter(ResultFilterByLabel(settings.settings_dict[settings.ACCEPTED_LABELS_KEY].split(',')))
@@ -140,7 +185,11 @@ class CameraSecurity:
         string_list_serializer = StringListSerializer()
 
         # Prepare others
+<<<<<<< HEAD
         image_drawer = OpenCVImageDrawer()
+=======
+        image_drawer = ImageDrawer()
+>>>>>>> main
 
         # Setup executors
         self.__logger.Log("Setting up executors...")
@@ -189,14 +238,24 @@ class CameraSecurity:
         delta_time = 0.0
         previous_step_time = datetime.now()
         while True:
+<<<<<<< HEAD
             self.__ProcessStep()
+=======
+            self.__ProcessStep(delta_time)
+>>>>>>> main
             current_time = datetime.now()
             time_diff = current_time - previous_step_time
             delta_time = time_diff.total_seconds()
             previous_step_time = current_time
 
+<<<<<<< HEAD
     def __ProcessStep(self):
         detections = self.__image_facade.ProcessFrame()
+=======
+    def __ProcessStep(self, delta_time: float):
+        detections = self.__image_facade.ProcessFrame()
+        self.__heatmap_facade.AddData(detections, delta_time)
+>>>>>>> main
         if self.__monitoring_facade.GetActiveZoneCount() == 0:
             return
         collisions = self.__monitoring_facade.GetCollidingZones(detections)

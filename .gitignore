@@ -11,7 +11,7 @@ __pycache__/
 *.key
 
 # Settings file
-camera_security/settings.ini
+settings.ini
 
 # Distribution / packaging
 .idea/

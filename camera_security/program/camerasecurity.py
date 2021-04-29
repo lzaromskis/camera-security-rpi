@@ -164,6 +164,7 @@ class CameraSecurity:
 
         # Create servers
         self.__logger.Log("Creating servers...")
+        #self.__logger.Log("System hostname: " + str(gethostname()))
         if settings.settings_dict[settings.USE_TLS_KEY] == "true":
             self.__logger.Log("Using TLS for server...")
             cert_file = settings.settings_dict[settings.CERT_FILE_KEY]
@@ -173,10 +174,10 @@ class CameraSecurity:
             # self.__server = ServerTLS(gethostname(), 7500, cert_file, key_file, executor, self.__logger)
             # self.__alert_server = AlertServerTLS(gethostname(), 7501, cert_file, key_file, self.__logger)
         else:
-            self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
-            self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
-            #self.__server = Server(gethostname(), 7500, executor, self.__logger)
-            #self.__alert_server = AlertServer(gethostname(), 7501, self.__logger)
+            #self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
+            #self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
+            self.__server = Server('', 7500, executor, self.__logger)
+            self.__alert_server = AlertServer('', 7501, self.__logger)
 
         # Setup alert actions
         self.__logger.Log("Setting up alert actions...")

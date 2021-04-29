@@ -26,7 +26,7 @@ class FileLogger(ILogger):
     def __del__(self):
         self.__file.close()
 
-    def Log(self, message: str, level: LogLevel = LogLevel.NONE):
+    def Log(self, message: str, level: LogLevel = LogLevel.INFO):
         self.__lock.acquire()
         self.__file.write(''.join([str(datetime.utcnow()), ": ", FileLogger.__level_text[level], message]))
         self.__file.flush()

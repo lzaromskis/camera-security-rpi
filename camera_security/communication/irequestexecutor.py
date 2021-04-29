@@ -4,8 +4,8 @@
 
 from abc import ABC, abstractmethod
 
-from camera_security.communication.requests.irequest import IRequest
 from camera_security.communication.requests.requestcode import RequestCode
+from camera_security.communication.requests.requesttemplate import RequestTemplate
 
 
 class IRequestExecutor(ABC):
@@ -18,7 +18,7 @@ class IRequestExecutor(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def RegisterRequest(self, request_code: RequestCode, request: IRequest):
+    def RegisterRequest(self, request_code: RequestCode, request: RequestTemplate):
         """
         Registers a new request that can be executed
         """

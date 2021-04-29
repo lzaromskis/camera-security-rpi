@@ -29,8 +29,19 @@ class AddMonitoredZoneRequest(RequestWithAuthentication):
         except DeserializationFailedError:
             return default_responses.GetInvalidAttributeInPacketResponse(PacketAttribute.ZONE)
 
-        ret_val = self.__monitoring_facade.AddZone(zone)
         packet = PacketData()
+
+        top_left, bottom_right = zone.GetBounds().GetCoordinates()
+        if top_left[0] >= bottom_right[0] or top_left[1] >= bottom_right[1]:
+            packet.AddAttribute(PacketAttribute.CODE, str(ResponseCode.BAD_DATA.value))
+            packet.AddAttribute(PacketAttribute.MESSAGE, "Monitored zone bounds have bad coordinates")
+
+        if len(zone.GetLabels()) == 0:
+            packet.AddAttribute(PacketAttribute.CODE, str(ResponseCode.BAD_DATA.value))
+            packet.AddAttribute(PacketAttribute.MESSAGE, "Monitored zone has no labels")
+
+        ret_val = self.__monitoring_facade.AddZone(zone)
+
         if ret_val:
             packet.AddAttribute(PacketAttribute.CODE, str(ResponseCode.OK.value))
             packet.AddAttribute(PacketAttribute.MESSAGE, "Monitored zone added successfully")

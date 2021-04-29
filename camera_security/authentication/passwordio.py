@@ -29,7 +29,7 @@ class PasswordIO(IPasswordIO):
             f.close()
             raise InvalidFileError(
                 "File \"" + self.__location + "\" must contain only 3 data attributes: magic number, hash and salt!")
-        ret_val = PasswordData(split_data[1], split_data[2])
+        ret_val = PasswordData(split_data[1].strip(), split_data[2].strip())
         f.close()
         return ret_val
 

@@ -15,6 +15,8 @@ class PacketData:
         """
         Adds an attribute to the PacketData dictionary.
         """
+        if not attribute_data.strip():
+            attribute_data = "NULL"
         self.attributes[attribute_name] = attribute_data
 
     def GetAttribute(self, attribute_name: str) -> Optional[str]:

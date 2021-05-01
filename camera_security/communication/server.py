@@ -54,7 +54,7 @@ class Server(IServer):
                     self.__logger.Log("Sending data to " + str(client_address))
                     size = len(response)
                     self.__logger.Log("Response size: " + str(size) + " B (" + str(size / 1024) + " KB)")
-                    connection.sendall(str.encode(''.join(["{:08d}".format(size), response])))
+                    connection.sendall(str.encode(response))
             except Exception as ex:
                 self.__logger.Log("Caught unhandled exception while processing a request: " + str(ex.args), LogLevel.ERROR)
             finally:

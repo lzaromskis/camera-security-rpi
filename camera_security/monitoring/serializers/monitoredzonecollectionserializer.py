@@ -40,6 +40,8 @@ class MonitoredZoneCollectionSerializer(IMonitoredZoneCollectionSerializer):
 
     def Deserialize(self, data: str) -> MonitoredZoneCollection:
         try:
+            if not data:
+                return MonitoredZoneCollection()
             split_data = data.split(self.ZONE_SEPARATOR)
             collection = MonitoredZoneCollection()
             for z in split_data:

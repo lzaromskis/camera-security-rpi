@@ -1,6 +1,7 @@
 # getimagerequest.py | camera-security-rpi
 # Implements the IRequest interface for getting a frame
 # Author: Lukas Žaromskis
+import cv2
 
 from camera_security.image.colour import Colour
 from camera_security.image.frame import Frame
@@ -42,7 +43,10 @@ class GetImageRequest(RequestWithAuthentication):
         if draw_detections is not None and draw_detections == "true":
             detections = self.__image_facade.GetPreviousDetections()
             for detection in detections:
-                self.__image_drawer.DrawRectangle(new_frame, detection.GetBoundingBox(), Colour.YELLOW, 3)
+                bounds = detection.GetBoundingBox()
+                self.__image_drawer.DrawRectangle(new_frame, bounds, Colour.YELLOW, 3)
+                self.__image_drawer.DrawText(new_frame, detection.GetLabel().upper(), bounds.GetCoordinates()[0], cv2.FONT_HERSHEY_COMPLEX,
+                                             1, 1, Colour.BLACK, Colour.YELLOW)
 
         serialized_frame = self.__frame_serializer.Serialize(new_frame)
         packet = PacketData()

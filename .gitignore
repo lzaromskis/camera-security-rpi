@@ -11,7 +11,7 @@ __pycache__/
 *.key
 
 # Settings file
-settings.ini
+# settings.ini
 
 # Distribution / packaging
 .idea/

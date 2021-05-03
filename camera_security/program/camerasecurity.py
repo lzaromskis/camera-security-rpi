@@ -174,10 +174,10 @@ class CameraSecurity:
             self.__server = ServerTLS('', 7500, cert_file, key_file, executor, self.__logger)
             self.__alert_server = AlertServerTLS('', 7501, cert_file, key_file, self.__logger)
         else:
-            self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
-            self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
-            # self.__server = Server('', 7500, executor, self.__logger)
-            # self.__alert_server = AlertServer('', 7501, self.__logger)
+            # self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
+            # self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
+            self.__server = Server('', 7500, executor, self.__logger)
+            self.__alert_server = AlertServer('', 7501, self.__logger)
 
         # Setup alert actions
         self.__logger.Log("Setting up alert actions...")

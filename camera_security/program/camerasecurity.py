@@ -103,7 +103,7 @@ class CameraSecurity:
     def __Initialize(self, settings: Settings):
         self.__logger.Log("Setting up variables...")
         self.__timeout = float(settings.settings_dict[settings.ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY])
-        self.__detection_threshold = int(settings.settings_dict[settings.ALERT_DETECTION_THRESHOLD])
+        self.__detection_threshold = 2
 
         self.__logger.Log("Creating authentication subsystem...")
         self.__auth_facade = AuthenticationFacade("password_io",
@@ -130,7 +130,7 @@ class CameraSecurity:
         self.__logger.Log("Setting up filters...")
         self.__image_facade.RegisterFilter(ResultFilterByLabel(settings.settings_dict[settings.ACCEPTED_LABELS_KEY].split(',')))
         self.__image_facade.RegisterFilter(ResultFilterByCertainty(float(settings.settings_dict[settings.CERTAINTY_THRESHOLD_KEY])))
-        self.__image_facade.RegisterFilter(ResizeBoundingBoxes(float(settings.settings_dict[settings.BOUNDS_RESIZE_PERCENTAGE_KEY])))
+        self.__image_facade.RegisterFilter(ResizeBoundingBoxes(float(settings.settings_dict[settings.BOUNDS_RESIZE_COEFFICIENT_KEY])))
 
         # Prepare serializers
         jpg_frame_serializer = JpgBase64FrameSerializer()
@@ -164,18 +164,18 @@ class CameraSecurity:
 
         # Create servers
         self.__logger.Log("Creating servers...")
-        #self.__logger.Log("System hostname: " + str(gethostname()))
+        # self.__logger.Log("System hostname: " + str(gethostname()))
         if settings.settings_dict[settings.USE_TLS_KEY] == "true":
             self.__logger.Log("Using TLS for server...")
             cert_file = settings.settings_dict[settings.CERT_FILE_KEY]
             key_file = settings.settings_dict[settings.KEY_FILE_KEY]
-            self.__server = ServerTLS("127.0.0.1", 7500, cert_file, key_file, executor, self.__logger)
-            self.__alert_server = AlertServerTLS("127.0.0.1", 7501, cert_file, key_file, self.__logger)
-            # self.__server = ServerTLS(gethostname(), 7500, cert_file, key_file, executor, self.__logger)
-            # self.__alert_server = AlertServerTLS(gethostname(), 7501, cert_file, key_file, self.__logger)
+            # self.__server = ServerTLS("127.0.0.1", 7500, cert_file, key_file, executor, self.__logger)
+            # self.__alert_server = AlertServerTLS("127.0.0.1", 7501, cert_file, key_file, self.__logger)
+            self.__server = ServerTLS('', 7500, cert_file, key_file, executor, self.__logger)
+            self.__alert_server = AlertServerTLS('', 7501, cert_file, key_file, self.__logger)
         else:
-            #self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
-            #self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
+            # self.__server = Server("127.0.0.1", 7500, executor, self.__logger)
+            # self.__alert_server = AlertServer("127.0.0.1", 7501, self.__logger)
             self.__server = Server('', 7500, executor, self.__logger)
             self.__alert_server = AlertServer('', 7501, self.__logger)
 
@@ -187,34 +187,22 @@ class CameraSecurity:
     def __Run(self):
         self.__server.StartListening()
         self.__alert_server.StartListening()
-        delta_time = 0.0
-        previous_step_time = datetime.now()
         while True:
             self.__ProcessStep()
-            current_time = datetime.now()
-            time_diff = current_time - previous_step_time
-            delta_time = time_diff.total_seconds()
-            previous_step_time = current_time
 
     def __ProcessStep(self):
         detections = self.__image_facade.ProcessFrame()
         if self.__monitoring_facade.GetActiveZoneCount() == 0:
             return
         collisions = self.__monitoring_facade.GetCollidingZones(detections)
-        detection_state = len(collisions) != 0
-        if self.__previous_detection_state == detection_state:
-            self.__detection_count = self.__detection_count + 1
-        else:
-            self.__detection_count = 1
-            self.__previous_detection_state = detection_state
-        if detection_state and self.__detection_count >= self.__detection_threshold:
+        if len(collisions) != 0:
             current_time = datetime.utcnow()
-            delta_time = current_time - self.__previous_saved_detection_time
-            if delta_time.total_seconds() > self.__timeout:
-                for zone in collisions:
+            for zone in collisions:
+                delta_time = current_time - zone.GetPreviousAlertTime()
+                if delta_time.total_seconds() > self.__timeout:
                     self.__logger.Log(''.join(["Detected object in zone '", zone.GetName(), "'!"]))
-                self.__previous_saved_detection_time = current_time
-                image_obj = self.__image_facade.GetFrame()
-                alert_data = dict(image=image_obj)
-                for action in self.__alert_actions:
-                    action.Execute(**alert_data)
+                    image_obj = self.__image_facade.GetFrame()
+                    alert_data = dict(image=image_obj, zone_name=zone.GetName())
+                    for action in self.__alert_actions:
+                        action.Execute(**alert_data)
+                    zone.SetPreviousAlertTime(current_time)

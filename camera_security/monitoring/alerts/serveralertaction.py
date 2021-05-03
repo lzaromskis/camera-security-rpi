@@ -12,4 +12,4 @@ class ServerAlertAction(IAlertAction):
         self.__alert_server = alert_server
 
     def Execute(self, **kwargs):
-        self.__alert_server.SendMessage(WebsocketMessages.ALERT)
+        self.__alert_server.SendMessage(''.join([WebsocketMessages.ALERT, " ", kwargs["zone_name"]]))

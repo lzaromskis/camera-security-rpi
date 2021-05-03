@@ -12,10 +12,10 @@ class SessionToken(ISessionToken):
 
     def __init__(self, secret_generator: ISecretGenerator):
         self.__secret = secret_generator.Generate(32)
-        self.__expirationDate = datetime.now() + timedelta(hours=6)
+        self.__expiration_date = datetime.now() + timedelta(hours=6)
 
     def IsValid(self, secret: str) -> bool:
-        return secret == self.__secret and datetime.now() < self.__expirationDate
+        return secret == self.__secret and datetime.now() < self.__expiration_date
 
     def GetSecret(self) -> str:
         return self.__secret

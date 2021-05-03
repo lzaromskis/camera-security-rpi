@@ -22,7 +22,7 @@ class Settings:
     TENSOR_LABELS_FILE_KEY = "tensor_labels_file"
     ACCEPTED_LABELS_KEY = "accepted_labels"
     CERTAINTY_THRESHOLD_KEY = "certainty_threshold"
-    BOUNDS_RESIZE_PERCENTAGE_KEY = "bounds_resize_percentage"
+    BOUNDS_RESIZE_COEFFICIENT_KEY = "bounds_resize_coefficient"
     CAMERA_ID_KEY = "camera_id"
     CAMERA_WIDTH_KEY = "camera_width"
     CAMERA_HEIGHT_KEY = "camera_height"
@@ -30,7 +30,6 @@ class Settings:
     ALERTS_FOLDER_KEY = "alerts_folder"
     ALERTS_TO_KEEP_KEY = "alerts_to_keep"
     ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY = "alert_triggered_timeout_seconds"
-    ALERT_DETECTION_THRESHOLD = "alert_detection_threshold"
 
     def __init__(self, settings_file: Optional[str] = None):
         # Initialize dictionary with default values
@@ -48,7 +47,7 @@ class Settings:
         self.settings_dict[self.TENSOR_LABELS_FILE_KEY] = "coco_labels.txt"
         self.settings_dict[self.ACCEPTED_LABELS_KEY] = "person"
         self.settings_dict[self.CERTAINTY_THRESHOLD_KEY] = "0.6"
-        self.settings_dict[self.BOUNDS_RESIZE_PERCENTAGE_KEY] = "0.1"
+        self.settings_dict[self.BOUNDS_RESIZE_COEFFICIENT_KEY] = "0.1"
         self.settings_dict[self.CAMERA_ID_KEY] = "0"
         self.settings_dict[self.CAMERA_WIDTH_KEY] = "640"
         self.settings_dict[self.CAMERA_HEIGHT_KEY] = "480"
@@ -56,7 +55,6 @@ class Settings:
         self.settings_dict[self.ALERTS_FOLDER_KEY] = "./alerts/"
         self.settings_dict[self.ALERTS_TO_KEEP_KEY] = "10"
         self.settings_dict[self.ALERT_TRIGGERED_TIMEOUT_SECONDS_KEY] = "30"
-        self.settings_dict[self.ALERT_DETECTION_THRESHOLD] = "2"
 
         # If a file was given, read data from it
         if settings_file:
@@ -74,6 +72,8 @@ class Settings:
             data = line.split('=')
             if len(data) != 2:
                 continue
+            data[0] = data[0].strip()
+            data[1] = data[1].strip()
             # Only change existing keys. Do not add new keys
             if data[0] in self.settings_dict:
                 self.settings_dict[data[0]] = data[1]

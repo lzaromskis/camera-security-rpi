@@ -1,6 +1,7 @@
 # monitoredzone.py | camera-security-rpi
 # Describes the MonitoredZone class for storing information about a monitored zone
 # Author: Lukas Žaromskis
+from datetime import datetime
 from typing import List
 
 from camera_security.utility.boundingbox import BoundingBox
@@ -13,6 +14,7 @@ class MonitoredZone:
         self.__bounds = bounds
         self.__active = False
         self.__labels = labels
+        self.__previous_alert_time = datetime(1, 1, 1, 0, 0)
 
     def GetName(self) -> str:
         """
@@ -43,6 +45,18 @@ class MonitoredZone:
         Sets the active state of the monitored zone
         """
         self.__active = active
+
+    def GetPreviousAlertTime(self) -> datetime:
+        """
+        Return the datetime that the zone was triggered previously
+        """
+        return self.__previous_alert_time
+
+    def SetPreviousAlertTime(self, alert_time: datetime):
+        """
+        Sets the datetime that the zone was triggered previously
+        """
+        self.__previous_alert_time = alert_time
 
     def __eq__(self, other: 'MonitoredZone'):
         return self.__name == other.__name

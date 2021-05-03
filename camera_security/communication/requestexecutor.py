@@ -4,9 +4,11 @@
 from camera_security.authentication.authenticationfacade import AuthenticationFacade
 from camera_security.communication.irequestexecutor import IRequestExecutor
 from camera_security.communication.packetattribute import PacketAttribute
+from camera_security.communication.packetdata import PacketData
 from camera_security.communication.requests.requestcode import RequestCode
 from camera_security.communication.requests.requesttemplate import RequestTemplate
 from camera_security.communication.responses.idefaultresponses import IDefaultResponses
+from camera_security.communication.responses.responsecode import ResponseCode
 from camera_security.communication.serializers.ipacketdataserializer import IPacketDataSerializer
 from camera_security.utility.exceptions.requestnotfounderror import RequestNotFoundError
 
@@ -33,7 +35,11 @@ class RequestExecutor(IRequestExecutor):
             response = self.__default_responses.GetInvalidRequestResponse(code)
             raise RequestNotFoundError("Request not found with code: " + str(code),
                                        self.__packet_data_serializer.Serialize(response))
+        except:
+            packet = PacketData()
+            packet.AddAttribute(PacketAttribute.CODE, str(ResponseCode.SERVER_ERROR.value))
+            packet.AddAttribute(PacketAttribute.MESSAGE, "Internal server error")
+            return self.__packet_data_serializer.Serialize(packet)
 
     def RegisterRequest(self, request_code: RequestCode, request: RequestTemplate):
         self.__requests[request_code.value] = request
-

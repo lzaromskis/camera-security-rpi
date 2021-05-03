@@ -1,4 +1,4 @@
-# imagedrawer.py | camera-security-rpi
+# opencvimagedrawer.py | camera-security-rpi
 # Implements the IImageDrawer interface for drawing on images
 # Author: Lukas Žaromskis
 

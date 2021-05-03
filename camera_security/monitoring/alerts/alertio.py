@@ -20,9 +20,12 @@ class AlertIO(IAlertIO):
     def SaveAlert(self, alert: AlertData):
         data = alert.GetImage().GetData()
         time = alert.GetTimestamp()
-        with open(self.__alerts_folder + time, 'wb') as f:
-            np.save(f, data)
-        self.__CullAlertsFolder()
+        file_path = self.__alerts_folder + time
+        # Do not save a file with the same name
+        if not path.isfile(file_path):
+            with open(file_path, 'wb') as f:
+                np.save(f, data)
+            self.__CullAlertsFolder()
 
     def GetAlert(self, timestamp: str) -> AlertData:
         file_path = self.__alerts_folder + timestamp
